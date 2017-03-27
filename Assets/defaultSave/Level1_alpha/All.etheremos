@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<PlayerStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <checkPointId>
+    <string>CHECKPOINT</string>
+    <string>CHECKPOINT (2)</string>
+    <string>CHECKPOINT (1)</string>
+  </checkPointId>
+  <HealthStatus>
+    <TotalPv>200</TotalPv>
+    <ActualPv>200</ActualPv>
+  </HealthStatus>
+  <InventoryStatus>
+    <Item>
+      <name>Item</name>
+      <description />
+      <owned>1</owned>
+      <tags />
+      <stats />
+    </Item>
+  </InventoryStatus>
+</PlayerStatus>

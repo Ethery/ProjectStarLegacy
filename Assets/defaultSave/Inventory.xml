@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<Inventaire xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Item>
+    <name>CloseCombat</name>
+    <description>Description de CloseCombat. CECI EST UN EXEMPLE ENCULÉ !</description>
+    <owned>1</owned>
+    <tags>
+      <string>Weapon</string>
+    </tags>
+    <stats>
+      <Stat>
+        <name>shotDamage</name>
+        <value>1</value>
+      </Stat>
+      <Stat>
+        <name>Color.R</name>
+        <value>1</value>
+      </Stat>
+      <Stat>
+        <name>Color.G</name>
+        <value>0</value>
+      </Stat>
+      <Stat>
+        <name>Color.B</name>
+        <value>0</value>
+      </Stat>
+    </stats>
+  </Item>
+  <Item>
+    <name>Weapon 1</name>
+    <description>Description de Weapon 1. CECI EST UN EXEMPLE ENCULÉ !</description>
+    <owned>4</owned>
+    <tags>
+      <string>Weapon</string>
+    </tags>
+    <stats>
+      <Stat>
+        <name>shotDamage</name>
+        <value>1</value>
+      </Stat>
+      <Stat>
+        <name>Color.R</name>
+        <value>0</value>
+      </Stat>
+      <Stat>
+        <name>Color.G</name>
+        <value>1</value>
+      </Stat>
+      <Stat>
+        <name>Color.B</name>
+        <value>0.2965517</value>
+      </Stat>
+    </stats>
+  </Item>
+  <Item>
+    <name>Lootable</name>
+    <description>Description de Lootable. CECI EST UN EXEMPLE ENCULÉ !</description>
+    <owned>7</owned>
+    <tags>
+      <string>Lootable</string>
+      <string>Health</string>
+    </tags>
+    <stats>
+      <Stat>
+        <name>Heal Amount</name>
+        <value>5</value>
+      </Stat>
+    </stats>
+  </Item>
+</Inventaire>

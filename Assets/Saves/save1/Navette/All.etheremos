@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<PlayerStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <checkPointId />
+  <HealthStatus>
+    <TotalPv>30</TotalPv>
+    <ActualPv>30</ActualPv>
+  </HealthStatus>
+  <InventoryStatus>
+    <Item>
+      <name>CloseCombatWeapon</name>
+      <description>Description de CloseCombatWeapon. CECI EST UN EXEMPLE ENCULÉ !</description>
+      <owned>1</owned>
+      <tags>
+        <string>Weapon</string>
+      </tags>
+      <stats>
+        <Stat>
+          <name>damage</name>
+          <value>1</value>
+        </Stat>
+        <Stat>
+          <name>color.R</name>
+          <value>1</value>
+        </Stat>
+        <Stat>
+          <name>color.G</name>
+          <value>0</value>
+        </Stat>
+        <Stat>
+          <name>color.B</name>
+          <value>0</value>
+        </Stat>
+      </stats>
+    </Item>
+    <Item>
+      <name>Weapon 1</name>
+      <description>Description de Weapon 1. CECI EST UN EXEMPLE ENCULÉ !</description>
+      <owned>1</owned>
+      <tags>
+        <string>Weapon</string>
+      </tags>
+      <stats>
+        <Stat>
+          <name>damage</name>
+          <value>1</value>
+        </Stat>
+        <Stat>
+          <name>color.R</name>
+          <value>0</value>
+        </Stat>
+        <Stat>
+          <name>color.G</name>
+          <value>1</value>
+        </Stat>
+        <Stat>
+          <name>color.B</name>
+          <value>0.2965517</value>
+        </Stat>
+      </stats>
+    </Item>
+    <Item>
+      <name>Heal</name>
+      <description>Description de Heal. CECI EST UN EXEMPLE ENCULÉ !</description>
+      <owned>20</owned>
+      <tags>
+        <string>Lootable</string>
+        <string>Health</string>
+      </tags>
+      <stats />
+    </Item>
+  </InventoryStatus>
+  <ended>0</ended>
+</PlayerStatus>

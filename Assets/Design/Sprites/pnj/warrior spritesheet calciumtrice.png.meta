@@ -1,0 +1,317 @@
+fileFormatVersion: 2
+guid: 898f0342bfda85b45be2bc71c663d744
+timeCreated: 1480955081
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: warrior spritesheet calciumtrice_0
+    21300002: warrior spritesheet calciumtrice_1
+    21300004: warrior spritesheet calciumtrice_2
+    21300006: warrior spritesheet calciumtrice_3
+    21300008: warrior spritesheet calciumtrice_4
+    21300010: warrior spritesheet calciumtrice_5
+    21300012: warrior spritesheet calciumtrice_6
+    21300014: warrior spritesheet calciumtrice_7
+    21300016: warrior spritesheet calciumtrice_8
+    21300018: warrior spritesheet calciumtrice_9
+    21300020: warrior spritesheet calciumtrice_10
+    21300022: warrior spritesheet calciumtrice_11
+    21300024: warrior spritesheet calciumtrice_12
+    21300026: warrior spritesheet calciumtrice_13
+    21300028: warrior spritesheet calciumtrice_14
+    21300030: warrior spritesheet calciumtrice_15
+    21300032: warrior spritesheet calciumtrice_16
+    21300034: warrior spritesheet calciumtrice_17
+    21300036: warrior spritesheet calciumtrice_18
+    21300038: warrior spritesheet calciumtrice_19
+    21300040: warrior spritesheet calciumtrice_20
+    21300042: warrior spritesheet calciumtrice_21
+    21300044: warrior spritesheet calciumtrice_22
+    21300046: warrior spritesheet calciumtrice_23
+    21300048: warrior spritesheet calciumtrice_24
+    21300050: warrior spritesheet calciumtrice_25
+    21300052: warrior spritesheet calciumtrice_26
+    21300054: warrior spritesheet calciumtrice_27
+    21300056: warrior spritesheet calciumtrice_28
+    21300058: warrior spritesheet calciumtrice_29
+    21300060: warrior spritesheet calciumtrice_30
+    21300062: warrior spritesheet calciumtrice_31
+    21300064: warrior spritesheet calciumtrice_32
+    21300066: warrior spritesheet calciumtrice_33
+    21300068: warrior spritesheet calciumtrice_34
+    21300070: warrior spritesheet calciumtrice_35
+    21300072: warrior spritesheet calciumtrice_36
+    21300074: warrior spritesheet calciumtrice_37
+    21300076: warrior spritesheet calciumtrice_38
+    21300078: warrior spritesheet calciumtrice_39
+    21300080: warrior spritesheet calciumtrice_40
+    21300082: warrior spritesheet calciumtrice_41
+    21300084: warrior spritesheet calciumtrice_42
+    21300086: warrior spritesheet calciumtrice_43
+    21300088: warrior spritesheet calciumtrice_44
+    21300090: warrior spritesheet calciumtrice_45
+    21300092: warrior spritesheet calciumtrice_46
+    21300094: warrior spritesheet calciumtrice_47
+    21300096: warrior spritesheet calciumtrice_48
+    21300098: warrior spritesheet calciumtrice_49
+    21300100: warrior spritesheet calciumtrice_50
+    21300102: warrior spritesheet calciumtrice_51
+    21300104: warrior spritesheet calciumtrice_52
+    21300106: warrior spritesheet calciumtrice_53
+    21300108: warrior spritesheet calciumtrice_54
+    21300110: warrior spritesheet calciumtrice_55
+    21300112: warrior spritesheet calciumtrice_56
+    21300114: warrior spritesheet calciumtrice_57
+    21300116: warrior spritesheet calciumtrice_58
+    21300118: warrior spritesheet calciumtrice_59
+    21300120: warrior spritesheet calciumtrice_60
+    21300122: warrior spritesheet calciumtrice_61
+    21300124: warrior spritesheet calciumtrice_62
+    21300126: warrior spritesheet calciumtrice_63
+    21300128: warrior spritesheet calciumtrice_64
+    21300130: warrior spritesheet calciumtrice_65
+    21300132: warrior spritesheet calciumtrice_66
+    21300134: warrior spritesheet calciumtrice_67
+    21300136: warrior spritesheet calciumtrice_68
+    21300138: warrior spritesheet calciumtrice_69
+    21300140: warrior spritesheet calciumtrice_70
+    21300142: warrior spritesheet calciumtrice_71
+    21300144: warrior spritesheet calciumtrice_72
+    21300146: warrior spritesheet calciumtrice_73
+    21300148: warrior spritesheet calciumtrice_74
+    21300150: warrior spritesheet calciumtrice_75
+    21300152: warrior spritesheet calciumtrice_76
+    21300154: warrior spritesheet calciumtrice_77
+    21300156: warrior spritesheet calciumtrice_78
+    21300158: warrior spritesheet calciumtrice_79
+    21300160: warrior spritesheet calciumtrice_80
+    21300162: warrior spritesheet calciumtrice_81
+    21300164: warrior spritesheet calciumtrice_82
+    21300166: warrior spritesheet calciumtrice_83
+    21300168: warrior spritesheet calciumtrice_84
+    21300170: warrior spritesheet calciumtrice_85
+    21300172: warrior spritesheet calciumtrice_86
+    21300174: warrior spritesheet calciumtrice_87
+    21300176: warrior spritesheet calciumtrice_88
+    21300178: warrior spritesheet calciumtrice_89
+    21300180: warrior spritesheet calciumtrice_90
+    21300182: warrior spritesheet calciumtrice_91
+    21300184: warrior spritesheet calciumtrice_92
+    21300186: warrior spritesheet calciumtrice_93
+    21300188: warrior spritesheet calciumtrice_94
+    21300190: warrior spritesheet calciumtrice_95
+    21300192: warrior spritesheet calciumtrice_96
+    21300194: warrior spritesheet calciumtrice_97
+    21300196: warrior spritesheet calciumtrice_98
+    21300198: warrior spritesheet calciumtrice_99
+    21300200: warrior spritesheet calciumtrice_100
+    21300202: warrior spritesheet calciumtrice_101
+    21300204: warrior spritesheet calciumtrice_102
+    21300206: warrior spritesheet calciumtrice_103
+    21300208: warrior spritesheet calciumtrice_104
+    21300210: warrior spritesheet calciumtrice_105
+    21300212: warrior spritesheet calciumtrice_106
+    21300214: warrior spritesheet calciumtrice_107
+    21300216: warrior spritesheet calciumtrice_108
+    21300218: warrior spritesheet calciumtrice_109
+    21300220: warrior spritesheet calciumtrice_110
+    21300222: warrior spritesheet calciumtrice_111
+    21300224: warrior spritesheet calciumtrice_112
+    21300226: warrior spritesheet calciumtrice_113
+    21300228: warrior spritesheet calciumtrice_114
+    21300230: warrior spritesheet calciumtrice_115
+    21300232: warrior spritesheet calciumtrice_116
+    21300234: warrior spritesheet calciumtrice_117
+    21300236: warrior spritesheet calciumtrice_118
+    21300238: warrior spritesheet calciumtrice_119
+    21300240: warrior spritesheet calciumtrice_120
+    21300242: warrior spritesheet calciumtrice_121
+    21300244: warrior spritesheet calciumtrice_122
+    21300246: warrior spritesheet calciumtrice_123
+    21300248: warrior spritesheet calciumtrice_124
+    21300250: warrior spritesheet calciumtrice_125
+    21300252: warrior spritesheet calciumtrice_126
+    21300254: warrior spritesheet calciumtrice_127
+    21300256: warrior spritesheet calciumtrice_128
+    21300258: warrior spritesheet calciumtrice_129
+    21300260: warrior spritesheet calciumtrice_130
+    21300262: warrior spritesheet calciumtrice_131
+    21300264: warrior spritesheet calciumtrice_132
+    21300266: warrior spritesheet calciumtrice_133
+    21300268: warrior spritesheet calciumtrice_134
+    21300270: warrior spritesheet calciumtrice_135
+    21300272: warrior spritesheet calciumtrice_136
+    21300274: warrior spritesheet calciumtrice_137
+    21300276: warrior spritesheet calciumtrice_138
+    21300278: warrior spritesheet calciumtrice_139
+    21300280: warrior spritesheet calciumtrice_140
+    21300282: warrior spritesheet calciumtrice_141
+    21300284: warrior spritesheet calciumtrice_142
+    21300286: warrior spritesheet calciumtrice_143
+    21300288: warrior spritesheet calciumtrice_144
+    21300290: warrior spritesheet calciumtrice_145
+    21300292: warrior spritesheet calciumtrice_146
+    21300294: warrior spritesheet calciumtrice_147
+    21300296: warrior spritesheet calciumtrice_148
+    21300298: warrior spritesheet calciumtrice_149
+    21300300: warrior spritesheet calciumtrice_150
+    21300302: warrior spritesheet calciumtrice_151
+    21300304: warrior spritesheet calciumtrice_152
+    21300306: warrior spritesheet calciumtrice_153
+    21300308: warrior spritesheet calciumtrice_154
+    21300310: warrior spritesheet calciumtrice_155
+    21300312: warrior spritesheet calciumtrice_156
+    21300314: warrior spritesheet calciumtrice_157
+    21300316: warrior spritesheet calciumtrice_158
+    21300318: warrior spritesheet calciumtrice_159
+    21300320: warrior spritesheet calciumtrice_160
+    21300322: warrior spritesheet calciumtrice_161
+    21300324: warrior spritesheet calciumtrice_162
+    21300326: warrior spritesheet calciumtrice_163
+    21300328: warrior spritesheet calciumtrice_164
+    21300330: warrior spritesheet calciumtrice_165
+    21300332: warrior spritesheet calciumtrice_166
+    21300334: warrior spritesheet calciumtrice_167
+    21300336: warrior spritesheet calciumtrice_168
+    21300338: warrior spritesheet calciumtrice_169
+    21300340: warrior spritesheet calciumtrice_170
+    21300342: warrior spritesheet calciumtrice_171
+    21300344: warrior spritesheet calciumtrice_172
+    21300346: warrior spritesheet calciumtrice_173
+    21300348: warrior spritesheet calciumtrice_174
+    21300350: warrior spritesheet calciumtrice_175
+    21300352: warrior spritesheet calciumtrice_176
+    21300354: warrior spritesheet calciumtrice_177
+    21300356: warrior spritesheet calciumtrice_178
+    21300358: warrior spritesheet calciumtrice_179
+    21300360: warrior spritesheet calciumtrice_180
+    21300362: warrior spritesheet calciumtrice_181
+    21300364: warrior spritesheet calciumtrice_182
+    21300366: warrior spritesheet calciumtrice_183
+    21300368: warrior spritesheet calciumtrice_184
+    21300370: warrior spritesheet calciumtrice_185
+    21300372: warrior spritesheet calciumtrice_186
+    21300374: warrior spritesheet calciumtrice_187
+    21300376: warrior spritesheet calciumtrice_188
+    21300378: warrior spritesheet calciumtrice_189
+    21300380: warrior spritesheet calciumtrice_190
+    21300382: warrior spritesheet calciumtrice_191
+    21300384: warrior spritesheet calciumtrice_192
+    21300386: warrior spritesheet calciumtrice_193
+    21300388: warrior spritesheet calciumtrice_194
+    21300390: warrior spritesheet calciumtrice_195
+    21300392: warrior spritesheet calciumtrice_196
+    21300394: warrior spritesheet calciumtrice_197
+    21300396: warrior spritesheet calciumtrice_198
+    21300398: warrior spritesheet calciumtrice_199
+    21300400: warrior spritesheet calciumtrice_200
+    21300402: warrior spritesheet calciumtrice_201
+    21300404: warrior spritesheet calciumtrice_202
+    21300406: warrior spritesheet calciumtrice_203
+    21300408: warrior spritesheet calciumtrice_204
+    21300410: warrior spritesheet calciumtrice_205
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 64
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: warrior spritesheet calciumtrice_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 35
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: warrior spritesheet calciumtrice_1
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 0
+        width: 35
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: warrior spritesheet calciumtrice_2
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 0
+        width: 34
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: warrior spritesheet calciumtrice_3
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 34
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
