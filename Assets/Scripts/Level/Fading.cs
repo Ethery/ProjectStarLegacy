@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 
 public class Fading : MonoBehaviour
 {
@@ -109,7 +108,11 @@ public class Fading : MonoBehaviour
     {
         async = SceneManager.LoadSceneAsync(scene);
         async.allowSceneActivation = false;
-        yield return async;
+		while (!async.isDone)
+		{
+			progress.text = "Progress:" + async.progress + "%";
+			yield return progress;
+		}
     }
 
 	IEnumerator FadeIn()

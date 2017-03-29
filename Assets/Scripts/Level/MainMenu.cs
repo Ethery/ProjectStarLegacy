@@ -13,6 +13,10 @@ public class MainMenu : MonoBehaviour
 	{
 		Cursor.lockState = CursorLockMode.Locked;
 		fadeObject = FindObjectOfType<Fading>();
+		if (continueButton != null)
+		{
+			continueButton.transform.parent.FindChild("Options").GetComponent<Button>().interactable = false;
+		}
 	}
 
     public void Update()
@@ -28,7 +32,7 @@ public class MainMenu : MonoBehaviour
 		if (!choiceDone)
 		{
 			PlayerPrefs.SetInt("SessionID", 0);
-			fadeObject.FadeTo("Navette");
+			fadeObject.FadeTo("Level1_alpha");
 			choiceDone = true;
 		}
 	}
@@ -38,7 +42,8 @@ public class MainMenu : MonoBehaviour
 		if (!choiceDone)
 		{
 			PlayerPrefs.SetInt("SessionID", PlayerPrefs.GetInt("LastSessionID"));
-			fadeObject.FadeTo(m);
+			MainStatus _main = MainStatus.load("Saves/save" + PlayerPrefs.GetInt("LastSessionID") + "/main.etheremos");
+			fadeObject.FadeTo(_main.lastVisitedLevel);
 			choiceDone = true;
 		}
 	}
@@ -47,8 +52,8 @@ public class MainMenu : MonoBehaviour
 	{
 		if (!choiceDone)
 		{
-			fadeObject.FadeTo("OptionMenu");
-			choiceDone = true;
+			/*fadeObject.FadeTo("OptionMenu");
+			choiceDone = true;*/
 		}
 	}
 

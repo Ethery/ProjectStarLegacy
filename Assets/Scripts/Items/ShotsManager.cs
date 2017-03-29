@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 
 /// <summary>
@@ -66,8 +66,6 @@ public class ShotsManager : MonoBehaviour
         {
             updateDirection();
         }
-
-
         var rad = Math.Atan2(m_direction.y, m_direction.x); // In radians
         var angle = rad * (180 / Math.PI);
 
@@ -75,7 +73,7 @@ public class ShotsManager : MonoBehaviour
 
         if ((float)angle - currentAngle != 0)
         {
-            gameObject.GetComponent<Transform>().Rotate(0, 0, (float)angle - currentAngle);
+            transform.Rotate(0, 0, (float)angle - currentAngle);
         }
 
         // 2 - Calcul du mouvement

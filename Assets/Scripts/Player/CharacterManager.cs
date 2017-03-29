@@ -109,9 +109,9 @@ public class CharacterManager : MonoBehaviour
     }
 
     public void Fire(float directionx,float directiony)
-    {
-        // 5 - Tir
-        float shootx = directionx;
+	{
+		// 5 - Tir
+		float shootx = directionx;
         float shooty = directiony;
            
         if (shootx != 0 || shooty != 0)
@@ -128,6 +128,7 @@ public class CharacterManager : MonoBehaviour
 		if (weaponManager != null)
 		{
 			weaponManager.changeWeapon();
+			weaponManager.flipWeapons(m_FacingRight,true);
 		}
 	}
 
@@ -143,7 +144,7 @@ public class CharacterManager : MonoBehaviour
 	private void Flip()
     {
         m_FacingRight = !m_FacingRight;
-		weaponManager.flipWeapons(m_FacingRight);
+		weaponManager.flipWeapons(m_FacingRight,false);
     }
 
     public bool isFacingRight()

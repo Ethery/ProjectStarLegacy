@@ -69,14 +69,14 @@ public class InventoryManager : MonoBehaviour {
 		
 		opened = display.activeSelf;
 
-		foreach (ObjectDictionaryItem item in FindObjectOfType<ObjectDictionary>().objects)
+		foreach (KeyValuePair<string,ObjectDictionaryItem> item in FindObjectOfType<ObjectDictionary>().list)
 		{
-			if (item.owned > 0)
+			if (item.Value.owned > 0)
 			{
-				_inventory.Add(new Item(item.nom, item.owned, item.tags));
-				if (item.tags.Contains("Weapon"))
+				_inventory.Add(new Item(item.Value.nom, item.Value.owned, item.Value.tags));
+				if (item.Value.tags.Contains("Weapon"))
 				{
-					PlayerWeapon w = item.GetComponent<PlayerWeapon>();
+					PlayerWeapon w = item.Value.GetComponent<PlayerWeapon>();
 					List<Stat> l = new List<Stat>();
 					l.Add(new Stat("damage", w.shotDamages));
 					l.Add(new Stat("color.R", w.color.r));

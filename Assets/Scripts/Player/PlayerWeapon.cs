@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+using UnityEngine;
+using System;
 
 public class PlayerWeapon : MonoBehaviour {
 
@@ -42,15 +42,12 @@ public class PlayerWeapon : MonoBehaviour {
 			//Debug.Log(dir);
 			parameters.m_direction = dir;
 		}
-		var rad = Mathf.Atan2(dir.y, dir.x); // In radians
-		var angle = rad * (180 / Mathf.PI);
 
-		float currentAngle = gameObject.GetComponent<Transform>().rotation.eulerAngles.z;
-
-		if ((float)angle - currentAngle != 0)
-		{
-			transform.Rotate(0, 0, (float)angle - currentAngle);
-		}
+		var rad = Mathf.Atan2(dir.y, dir.x)*Mathf.Rad2Deg; // In radians
+		
+		//float currentAngle = gameObject.GetComponent<Transform>().rotation.eulerAngles.z;
+		transform.localRotation = Quaternion.AngleAxis(rad,Vector3.forward);
+		Debug.Log(transform.rotation);
 	}
 	
 }

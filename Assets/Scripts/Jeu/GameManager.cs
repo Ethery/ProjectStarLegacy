@@ -34,6 +34,10 @@ public class GameManager : MonoBehaviour {
 				EventSystem.current.SetSelectedGameObject(display.transform.FindChild("ResumeButton").gameObject);
             buttonReleased = false;
 		}
+		if (FindObjectOfType<TextConvManager>().isActive)
+		{
+			buttonReleased = false;
+		}
         if(Input.GetButtonUp("Pause"))
         {
             buttonReleased = true;

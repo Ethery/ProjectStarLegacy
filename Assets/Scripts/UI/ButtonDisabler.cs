@@ -1,15 +1,14 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ButtonDisabler : MonoBehaviour {
 
 	public bool loadEverywhere;
-
-
 	SavesManager _sm;
+
 	private void Start()
 	{
-		_sm = GameObject.Find("_GameManager").GetComponent<SavesManager>();
+		_sm = FindObjectOfType<SavesManager>();
 	}
 	// Update is called once per frame
 	void Update () {

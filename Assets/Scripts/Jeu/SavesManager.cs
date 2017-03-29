@@ -15,13 +15,14 @@ public class SavesManager : MonoBehaviour {
 	
 	private Progression _prog;
 	private MainStatus _main;
-	public List<CheckPoint> checkpoints;
+	private CheckPoint[] checkpoints;
 
 	public bool canSave;
 	
-
+	
 	// Use this for initialization
 	void Start () {
+		checkpoints = FindObjectOfType<CheckPoint>().transform.parent.GetComponentsInChildren<CheckPoint>();
 		_im = GameObject.FindObjectOfType<InventoryManager>();
 		_im.init();
 		_player = GameObject.Find("Player").GetComponent<HealthBar>();
@@ -77,8 +78,7 @@ public class SavesManager : MonoBehaviour {
 			_prog = Progression.load("Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
 			_im.load(_prog.items);
 			_player.load(_prog.health);
-
-            Debug.Log("LOAD:"+checkpoints[0]);
+			
 			CheckPoint tmp = checkpoints[0];
 			foreach (CheckPoint cp in checkpoints)
 			{
@@ -154,10 +154,16 @@ public class Progression
 		return new Progression();
 	}
 
-	public void save(Health h, Inventory i,string fileName)
+	public void save(Health h, Inventory inv,string fileName)
 	{
+		/*String str = "";
+		for (int i = 0; i < checkPointId.Count; i++)
+		{
+			str += checkPointId[i]+",";
+		}
+		Debug.Log("Save:" + str);*/
 		health = h;
-		items = i;
+		items = inv;
 		var serializer = new XmlSerializer(typeof(Progression));
 
 		SavesManager.EnsureFolder(Application.dataPath + "/" + fileName);
@@ -180,9 +186,10 @@ public class MainStatus
 	{
 		lastVisitedLevel = "";
         levels = new List<LevelStats>();
-        for(int i = 0;i<SceneManager.sceneCount;i++)
+        for(int i = 0;i<SceneManager.sceneCountInBuildSettings;i++)
         {
-            levels.Add(new LevelStats(SceneManager.GetSceneAt(i).name, false));
+			Debug.Log(i+":"+ SceneManager.GetSceneByBuildIndex(i).name + "::"+SceneManager.GetSceneByBuildIndex(i));
+            levels.Add(new LevelStats(SceneManager.GetSceneByBuildIndex(i).name, false));
         }
 	}
 

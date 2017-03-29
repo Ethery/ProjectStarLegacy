@@ -10,7 +10,7 @@ public class CheckPoint : MonoBehaviour {
 
 	private void Start()
 	{
-		_sm = GameObject.FindObjectOfType<SavesManager>();
+		_sm = FindObjectOfType<SavesManager>();
 		id = transform.name.ToUpper();
 	}
 
@@ -27,8 +27,8 @@ public class CheckPoint : MonoBehaviour {
 		if (collision.name == "Player")
 		{
 			_sm.canSave = true;
-			_sm.saveAll(PlayerPrefs.GetInt("SessionID", 0));
 			_sm.setLastCheckpoint(id);
+			_sm.saveAll(PlayerPrefs.GetInt("SessionID", 0));
 			if (!activated)
 			{
 				GetComponent<Animator>().SetTrigger("Activated");

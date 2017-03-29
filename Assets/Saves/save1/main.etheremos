@@ -3,7 +3,16 @@
   <lastVisitedLevel>Navette</lastVisitedLevel>
   <levels>
     <LevelStats>
+      <finished>false</finished>
+    </LevelStats>
+    <LevelStats>
+      <finished>false</finished>
+    </LevelStats>
+    <LevelStats>
       <nom>Navette</nom>
+      <finished>false</finished>
+    </LevelStats>
+    <LevelStats>
       <finished>false</finished>
     </LevelStats>
   </levels>

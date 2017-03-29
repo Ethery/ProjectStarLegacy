@@ -4,8 +4,8 @@ using UnityEngine;
 public class ObjectDictionary : MonoBehaviour {
 
 	public List<ObjectDictionaryItem> objects;
-
-	[SerializeField]
+	public List<ob> obj;
+	
 	public Dictionary<string, ObjectDictionaryItem> list;
 	
 	public void initList()
@@ -17,4 +17,12 @@ public class ObjectDictionary : MonoBehaviour {
 		}
 	}
 }
+
+[System.Serializable]
+public class ob
+{
+	public ObjectDictionaryItem item;
+	public int a;
+}
+
 

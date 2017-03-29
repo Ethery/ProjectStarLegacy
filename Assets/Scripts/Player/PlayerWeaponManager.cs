@@ -4,14 +4,13 @@ using System.Collections.Generic;
 public class PlayerWeaponManager : MonoBehaviour
 {
 	public int actualWeapon;
-	[SerializeField]
-	private List<PlayerWeapon> weapons;
-	private GameObject[] weaponsSprites;
+	public List<PlayerWeapon> weapons;
+	public GameObject[] weaponsSprites;
 	public bool isActivate;
 	public int selected = 0;
-	private Transform player;
 	public Animator roue;
 	public float projectileSpeed = 1f;
+	//public Transform weaponUsed;
 
 
 	//--------------------------------
@@ -27,9 +26,7 @@ public class PlayerWeaponManager : MonoBehaviour
 	void Start()
 	{
 		shootCooldown = 0f;
-		player = FindObjectOfType<CharacterManager>().transform;
 		weapons = FindObjectOfType<InventoryManager>().weaponList;
-
 		weaponsSprites = GameObject.FindGameObjectsWithTag("weaponSprite");
 		if (weapons.Count > 0)
 		{
@@ -57,7 +54,7 @@ public class PlayerWeaponManager : MonoBehaviour
 		{
 			shootCooldown -= Time.deltaTime;
 		}
-		roue.transform.GetChild(0).Find("Selecteur").localRotation = Quaternion.Euler(0,0,selected*-90);
+		//roue.transform.GetChild(0).Find("Selecteur").localRotation = Quaternion.Euler(0,0,selected*-90);
 		
 		if (Input.GetButton("OpenWeaponsWheel"))
 		{
@@ -87,22 +84,24 @@ public class PlayerWeaponManager : MonoBehaviour
 
 	public void Attack(Vector2 dir)
 	{
-
 		if (shootCooldown <= 0f)
 		{
 			shootCooldown = shootingRate;
 
-			if (player.GetComponentInChildren<PlayerWeapon>() != null)
-				player.GetComponentInChildren<PlayerWeapon>().Attack(dir);
+			if (GetComponentInChildren<PlayerWeapon>() != null)
+			{
+				GetComponentInChildren<PlayerWeapon>().Attack(dir);
+			}
 		}
 	}
 
 	public void changeWeapon()
 	{
+		Debug.Log("PENIS");
 		if (weapons.Count > 1)
 		{
-			if (player.Find("currentWeapon") != null)
-				GameObject.Destroy(player.Find("currentWeapon").gameObject);
+			if (GetComponentInChildren<PlayerWeapon>() != null)
+				Destroy(GetComponentInChildren<PlayerWeapon>().gameObject);
 			if (actualWeapon + 1 < weapons.Count)
 			{
 				actualWeapon++;
@@ -112,23 +111,23 @@ public class PlayerWeaponManager : MonoBehaviour
 				actualWeapon = 0;
 			}
 			selected = actualWeapon;
-			var newWeapon = (Transform)Instantiate(weapons[actualWeapon].transform, player, false);
-			newWeapon.gameObject.SetActive(true);
-			newWeapon.name = "currentWeapon";
+			var weaponUsed = Instantiate(weapons[actualWeapon].transform, transform, false);
+			weaponUsed.gameObject.SetActive(true);
+			weaponUsed.name = "currentWeapon";
 		}
 	}
 
 	public void changeWeapon(int s)
 	{
-		Debug.Log(s + " max: " + weapons.Count);
+		Debug.Log("PENIS");
 		if (s >= 0 && s < weapons.Count)
 		{
-			if (player.Find("currentWeapon") != null)
-				GameObject.Destroy(player.Find("currentWeapon").gameObject);
+			if (GetComponentInChildren<PlayerWeapon>() != null)
+				Destroy(GetComponentInChildren<PlayerWeapon>().gameObject);
 			actualWeapon = s;
-			var newWeapon = (Transform)Instantiate(weapons[actualWeapon].transform, player, false);
-			newWeapon.gameObject.SetActive(true);
-			newWeapon.name = "currentWeapon";
+			var weaponUsed = Instantiate(weapons[actualWeapon].transform, transform, false);
+			weaponUsed.gameObject.SetActive(true);
+			weaponUsed.name = "currentWeapon";
 		}
 	}
 
@@ -150,12 +149,22 @@ public class PlayerWeaponManager : MonoBehaviour
 		}
 	}
 
-	public void flipWeapons(bool right)
+	public void flipWeapons(bool right,bool first)
 	{
-		if (weapons.Count > 0 )
+		if (GetComponentInChildren<PlayerWeapon>() != null)
 		{
-			weapons[selected].GetComponent<SpriteRenderer>().flipX = !right;
-			weapons[selected].GetComponent<Transform>().localPosition = new Vector3(-weapons[selected].GetComponent<Transform>().localPosition.x, weapons[selected].GetComponent<Transform>().localPosition.y, weapons[selected].GetComponent<Transform>().localPosition.z);
+			GetComponentInChildren<PlayerWeapon>().GetComponent<SpriteRenderer>().flipX = !right;
+			if (first && right)
+			{
+				GetComponentInChildren<PlayerWeapon>().transform.localPosition = new Vector3(GetComponentInChildren<PlayerWeapon>().transform.localPosition.x, GetComponentInChildren<PlayerWeapon>().transform.localPosition.y, GetComponentInChildren<PlayerWeapon>().transform.localPosition.z);
+			}
+			else if(first && !right)
+			{
+				GetComponentInChildren<PlayerWeapon>().transform.localPosition = new Vector3(-GetComponentInChildren<PlayerWeapon>().transform.localPosition.x, GetComponentInChildren<PlayerWeapon>().transform.localPosition.y, GetComponentInChildren<PlayerWeapon>().transform.localPosition.z);
+			}
+			else{
+				GetComponentInChildren<PlayerWeapon>().transform.localPosition = new Vector3(-GetComponentInChildren<PlayerWeapon>().transform.localPosition.x, GetComponentInChildren<PlayerWeapon>().transform.localPosition.y, GetComponentInChildren<PlayerWeapon>().transform.localPosition.z);
+			}
 		}
 	}
 }
