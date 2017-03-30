@@ -6,7 +6,7 @@ public class CheckPoint : MonoBehaviour {
 
 	SavesManager _sm;
 	public string id;
-	public bool activated = false;
+	public bool activated = false, saved;
 
 	private void Start()
 	{
@@ -34,6 +34,8 @@ public class CheckPoint : MonoBehaviour {
 				GetComponent<Animator>().SetTrigger("Activated");
 				activated = true;
 			}
+			saved = true;
+			Debug.Log(saved);
 		}
 	}
 
@@ -42,6 +44,7 @@ public class CheckPoint : MonoBehaviour {
 		if (collision.name == "Player")
 		{
 			_sm.canSave = false;
+			saved = false;
 		}
 	}
 }

@@ -12,6 +12,7 @@ public class Fading : MonoBehaviour
     private Image img;
     private Text progress;
     private string scene;
+	private int sceneI;
     private bool fadeOut = false,
 				 init = false;
     private AsyncOperation async;
@@ -46,9 +47,18 @@ public class Fading : MonoBehaviour
 	{
 		Time.timeScale = 0f;
 		this.scene = scene;
+		this.sceneI = -1;
 		StartCoroutine(FadeOut());
-        StartCoroutine(LoadScene());
-    }
+		StartCoroutine(LoadScene());
+	}
+	public void FadeTo(int scene)
+	{
+		Time.timeScale = 0f;
+		this.sceneI = scene;
+		this.scene = "";
+		StartCoroutine(FadeOut());
+		StartCoroutine(LoadScene());
+	}
 
 	public void Update()
 	{
@@ -60,6 +70,8 @@ public class Fading : MonoBehaviour
         if (SceneManager.GetActiveScene().name == scene && async.allowSceneActivation)
         {
 			Time.timeScale = 1f;
+			if(FindObjectOfType<SavesManager>() != null)
+			FindObjectOfType<SavesManager>().main.levels[SceneManager.GetActiveScene().buildIndex].nom = SceneManager.GetActiveScene().name;
             StartCoroutine(FadeIn());
             scene = "";
         }
@@ -106,13 +118,21 @@ public class Fading : MonoBehaviour
 
 	IEnumerator LoadScene()
     {
-        async = SceneManager.LoadSceneAsync(scene);
+		if (sceneI == -1)
+		{
+			async = SceneManager.LoadSceneAsync(scene);
+		}
+		else if( scene == "")
+		{
+			async = SceneManager.LoadSceneAsync(sceneI);
+		}
         async.allowSceneActivation = false;
 		while (!async.isDone)
 		{
 			progress.text = "Progress:" + async.progress + "%";
 			yield return progress;
 		}
+		scene = SceneManager.GetActiveScene().name;
     }
 
 	IEnumerator FadeIn()

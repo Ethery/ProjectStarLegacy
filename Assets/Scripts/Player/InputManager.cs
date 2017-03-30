@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour
     private GameObject m_pnj;
     private int directionx = 0;
     private int directiony = 0;
-    public bool canMove;
+    public bool canMove,canUse;
 
     private void Awake()
     {
@@ -17,6 +17,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
 	{
+		transform.FindChild("button").gameObject.SetActive(canUse);
 		// On reset les variables pour lire l'input suivante.
 		directionx = 0;
 		directiony = 0;

@@ -32,7 +32,7 @@ public class MainMenu : MonoBehaviour
 		if (!choiceDone)
 		{
 			PlayerPrefs.SetInt("SessionID", 0);
-			fadeObject.FadeTo("Level1_alpha");
+			fadeObject.FadeTo("Navette");
 			choiceDone = true;
 		}
 	}

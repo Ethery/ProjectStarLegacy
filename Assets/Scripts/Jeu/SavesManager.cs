@@ -12,9 +12,9 @@ public class SavesManager : MonoBehaviour {
 
 	private InventoryManager _im;
 	private HealthBar _player;
-	
-	private Progression _prog;
-	private MainStatus _main;
+
+	public Progression prog;
+	public MainStatus main;
 	private CheckPoint[] checkpoints;
 
 	public bool canSave;
@@ -26,18 +26,19 @@ public class SavesManager : MonoBehaviour {
 		_im = GameObject.FindObjectOfType<InventoryManager>();
 		_im.init();
 		_player = GameObject.Find("Player").GetComponent<HealthBar>();
-		_prog = new Progression();
-		_main = new MainStatus();
+		prog = new Progression();
+		main = new MainStatus();
 		switch (PlayerPrefs.GetInt("SessionID", 0))
 		{
 			case 0:
 				canSave = true;
+				main.init();
 				saveAll(PlayerPrefs.GetInt("SessionID", 0));
                 canSave = false;
 				break;
 			default:
-                loadAll(PlayerPrefs.GetInt("SessionID", 0));
-                break;
+				loadAll(PlayerPrefs.GetInt("SessionID", 0));
+				break;
 		}
 	}
 
@@ -59,10 +60,10 @@ public class SavesManager : MonoBehaviour {
 
                 _player.transform.position = checkpoints[0].transform.position;
             }
-			_prog.save(_player.save(), _im.save(), "Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
+			prog.save(_player.save(), _im.save(), "Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
 
-			_main.lastVisitedLevel = SceneManager.GetActiveScene().name;
-			_main.save("Saves/save" + saveNb + "/main.etheremos");
+			main.lastVisitedLevel = SceneManager.GetActiveScene().name;
+			main.save("Saves/save" + saveNb + "/main.etheremos");
 			PlayerPrefs.SetInt("SessionID", saveNb);
 			PlayerPrefs.SetInt("LastSessionID", saveNb);
 			PlayerPrefs.Save();
@@ -74,21 +75,21 @@ public class SavesManager : MonoBehaviour {
 	{
 		if (Directory.Exists(Application.dataPath + "/Saves"))
 		{
-			_main = MainStatus.load("Saves/save" + saveNb + "/main.etheremos");
-			_prog = Progression.load("Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
-			_im.load(_prog.items);
-			_player.load(_prog.health);
+			main = MainStatus.load("Saves/save" + saveNb + "/main.etheremos");
+			prog = Progression.load("Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
+			_im.load(prog.items);
+			_player.load(prog.health);
 			
 			CheckPoint tmp = checkpoints[0];
 			foreach (CheckPoint cp in checkpoints)
 			{
-				if (_prog.checkPointId.Contains(cp.id))
+				if (prog.checkPointId.Contains(cp.id))
 				{
 					cp.activated = true;
 				}
-				if (_prog.checkPointId.Count >= 1)
+				if (prog.checkPointId.Count >= 1)
 				{
-					if (_prog.checkPointId[_prog.checkPointId.Count - 1] == cp.id)
+					if (prog.checkPointId[prog.checkPointId.Count - 1] == cp.id)
 					{
 						tmp = cp;
 					}
@@ -100,11 +101,18 @@ public class SavesManager : MonoBehaviour {
 
 	public void setLastCheckpoint(string id)
 	{
-		if (_prog.checkPointId.Contains(id))
+		if (prog.checkPointId.Contains(id))
 		{
-			_prog.checkPointId.Remove(id);
+			prog.checkPointId.Remove(id);
 		}
-		_prog.checkPointId.Add(id);
+		prog.checkPointId.Add(id);
+	}
+
+	public void finished()
+	{
+		main.levelFinished();
+		prog.reset();
+		saveAll(PlayerPrefs.GetInt("SessionID", 0));
 	}
     
 	public static void EnsureFolder(string path)
@@ -130,15 +138,20 @@ public class Progression
 
 	[XmlArray("InventoryStatus")]
 	public Inventory items;
-
-	public int ended;
+	
 
 	public Progression()
 	{
 		health = new Health();
 		items = new Inventory();
 		checkPointId = new List<string>();
-		ended = 0;
+	}
+
+	public void reset()
+	{
+		health = new Health();
+		items = new Inventory();
+		checkPointId = new List<string>();
 	}
 
 	public static Progression load(string fileName)
@@ -156,12 +169,6 @@ public class Progression
 
 	public void save(Health h, Inventory inv,string fileName)
 	{
-		/*String str = "";
-		for (int i = 0; i < checkPointId.Count; i++)
-		{
-			str += checkPointId[i]+",";
-		}
-		Debug.Log("Save:" + str);*/
 		health = h;
 		items = inv;
 		var serializer = new XmlSerializer(typeof(Progression));
@@ -185,12 +192,29 @@ public class MainStatus
 	public MainStatus()
 	{
 		lastVisitedLevel = "";
-        levels = new List<LevelStats>();
-        for(int i = 0;i<SceneManager.sceneCountInBuildSettings;i++)
-        {
-			Debug.Log(i+":"+ SceneManager.GetSceneByBuildIndex(i).name + "::"+SceneManager.GetSceneByBuildIndex(i));
-            levels.Add(new LevelStats(SceneManager.GetSceneByBuildIndex(i).name, false));
-        }
+		levels = new List<LevelStats>();
+	}
+
+	public void init()
+	{
+		levels = new List<LevelStats>();
+		for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+		{
+			levels.Add(new LevelStats(i, SceneManager.GetSceneByBuildIndex(i).name, false));
+		}
+	}
+
+	public void levelFinished()
+	{
+		foreach (LevelStats lvl in levels)
+		{
+			if (lvl.nom == SceneManager.GetActiveScene().name)
+			{
+				lvl.finished = true;
+				lastVisitedLevel = "Navette";
+				break;
+			}
+		}
 	}
 
 	public static MainStatus load(string fileName)
@@ -217,18 +241,24 @@ public class MainStatus
 
 public class LevelStats
 {
-    public string nom;
+    public int id;
+	public string nom;
     public bool finished;
 
     public LevelStats()
     {
-        nom = "";
+		id = -1;
+		nom = "Non Visit�";
         finished = false;
     }
 
-    public LevelStats(string nNom, bool nFinished)
+    public LevelStats(int nid,String nNom, bool nFinished)
     {
-        nom = nNom;
+		id = nid;
+		if (nNom == null)
+			nom = "";
+		else
+			nom = nNom;
         finished = nFinished;
     }
 }

@@ -3,16 +3,23 @@
   <lastVisitedLevel>Navette</lastVisitedLevel>
   <levels>
     <LevelStats>
+      <id>0</id>
+      <nom />
       <finished>false</finished>
     </LevelStats>
     <LevelStats>
+      <id>1</id>
+      <nom />
       <finished>false</finished>
     </LevelStats>
     <LevelStats>
+      <id>2</id>
       <nom>Navette</nom>
       <finished>false</finished>
     </LevelStats>
     <LevelStats>
+      <id>3</id>
+      <nom />
       <finished>false</finished>
     </LevelStats>
   </levels>

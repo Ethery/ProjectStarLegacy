@@ -54,7 +54,7 @@ public class PlayerWeaponManager : MonoBehaviour
 		{
 			shootCooldown -= Time.deltaTime;
 		}
-		//roue.transform.GetChild(0).Find("Selecteur").localRotation = Quaternion.Euler(0,0,selected*-90);
+
 		
 		if (Input.GetButton("OpenWeaponsWheel"))
 		{

@@ -36,7 +36,6 @@ public class ShipDoor : MonoBehaviour {
 		float t = Vector3.Distance(directionOuverture, transform.position);
 		while (t > 0.1)
 		{
-			Debug.Log(t);
 			t = Vector3.Distance(directionOuverture, transform.position);
 			transform.position = Vector2.Lerp(transform.position, directionOuverture, Time.deltaTime * vitesseDOuverture);
 			yield return null;
@@ -57,20 +56,13 @@ public class ShipDoor : MonoBehaviour {
 		opened = false;
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
+
+	private void OnTriggerStay2D(Collider2D collision)
 	{
 		if (collision.GetComponent<CharacterManager>() != null)
 		{
 			ranged = true;
-			button.gameObject.SetActive(ranged && !opened);
-		}
-	}
-
-	private void OnTriggerStay2S(Collider2D other)
-	{
-		if (other.GetComponent<CharacterManager>() != null)
-		{
-			button.gameObject.SetActive(ranged && !opened);
+			collision.GetComponent<InputManager>().canUse = ranged && !opened;
 		}
 	}
 
@@ -79,7 +71,7 @@ public class ShipDoor : MonoBehaviour {
 		if (collision.GetComponent<CharacterManager>() != null && opened)
 		{
 			ranged = false;
-			button.gameObject.SetActive(ranged && !opened);
+			collision.GetComponent<InputManager>().canUse = ranged;
 		}
 	}
 }

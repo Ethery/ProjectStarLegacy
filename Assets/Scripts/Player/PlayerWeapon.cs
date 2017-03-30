@@ -42,12 +42,16 @@ public class PlayerWeapon : MonoBehaviour {
 			//Debug.Log(dir);
 			parameters.m_direction = dir;
 		}
-
-		var rad = Mathf.Atan2(dir.y, dir.x)*Mathf.Rad2Deg; // In radians
-		
-		//float currentAngle = gameObject.GetComponent<Transform>().rotation.eulerAngles.z;
-		transform.localRotation = Quaternion.AngleAxis(rad,Vector3.forward);
-		Debug.Log(transform.rotation);
+		var rad = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg; // In radians
+		if (GetComponent<SpriteRenderer>().flipX)
+		{
+			transform.localRotation = Quaternion.AngleAxis(rad, Vector3.back);
+		}
+		else
+		{
+			transform.localRotation = Quaternion.AngleAxis(rad, Vector3.forward);
+		}
+			
 	}
 	
 }

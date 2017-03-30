@@ -26,7 +26,13 @@ public class MainGameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		
+		foreach (MainGameManager a in FindObjectsOfType<MainGameManager>())
+		{
+			if (a != this)
+			{
+				Destroy(a.gameObject);
+			}
+		}
 	}
 	
 	#endregion
