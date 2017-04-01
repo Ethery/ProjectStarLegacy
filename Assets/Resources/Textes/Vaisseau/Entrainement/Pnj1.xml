@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Conversation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Phrase>
+		<Emotion>Passif</Emotion>
+		<Texte>Bonjour capitaine ! \\n Bienvenue dans la sale d'entrainement du vaisseau.</Texte>
+		<Reponses />
+	</Phrase>
+	<Phrase>
+		<Emotion>Passif</Emotion>
+		<Texte>Je suis l'instructeur. Ici afin de vous aider dans le debut de votre aventure.</Texte>
+		<Reponses/>
+	</Phrase>
+	<Phrase>
+		<Emotion>Passif</Emotion>
+		<Texte>Utilisez les touches Q et D ou le joystick gauche de la manette afin de vous deplacer et la touche Espace ou le bouton A de la manette afin de sauter.</Texte>
+		<Reponses />
+	</Phrase>
+	<Phrase>
+		<Emotion>Passif</Emotion>
+		<Texte>Faites attention, sur certaines planete la gravité est trés faible. Un simple saut peut vous emener dans l'espace.</Texte>
+		<Reponses />
+	</Phrase>
+    <Phrase>
+		<Emotion>Passif</Emotion>
+		<Texte>Vous pourrez trouver dans certaines de vos missions. Une fois ces objets recupï¿½res vous pouvez en avoir une vue dans votre inventaire (touche i/Bouton Select)</Texte>
+		<Reponses />
+	</Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Si vous avez des questions supplementaires n'hï¿½sitez pas ï¿½ regarder sur l'ordinateur de bord. Il pourra vous fournir toutes les lecons necessaires.</Texte>
+    <Reponses />
+  </Phrase>
+	<Phrase>
+		<Emotion>Heureux</Emotion>
+		<Texte>Bon courage Capitaine.</Texte>
+		<Reponses>
+		  <Reponse>
+			  <TexteReponse>Merci.</TexteReponse>
+			  <Resultat/>
+		  </Reponse>
+		</Reponses>
+	</Phrase>
+</Conversation>
+

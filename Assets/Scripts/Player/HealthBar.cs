@@ -41,14 +41,17 @@ public class HealthBar : MonoBehaviour{
 			correctBar = true;
 		}
 		else
+		{
+			Debug.Log("healthBar non renseignée");
 			correctBar = false;
-		health.ActualPv = health.TotalPv;
+		}
+		health.actualPv = health.totalPv;
 		updateBar();
 	}
 
     public void updateBar()
     {
-		if (health.ActualPv <= 0)
+		if (health.actualPv <= 0)
 		{
 			FindObjectOfType<Fading>().FadeTo(SceneManager.GetActiveScene().name);
 			return;
@@ -70,8 +73,8 @@ public class HealthBar : MonoBehaviour{
             }
 
 			jauge.fillAmount = health.getPourcentagePv();
-            txtHealth.text = health.ActualPv + "/" + health.TotalPv;
-        }
+            txtHealth.text = health.actualPv + "/" + health.totalPv;
+		}
     }
 
     public void setDamages(float damage)
@@ -80,7 +83,7 @@ public class HealthBar : MonoBehaviour{
 		{
 			if (!GetComponent<EffectsManager>().effets[GetComponent<EffectsManager>().Invincible].actif)
 			{
-				health.ActualPv -= damage;
+				health.actualPv -= damage;
 
 				afficherFluctuationLife(false, damage);
 			}
@@ -88,7 +91,7 @@ public class HealthBar : MonoBehaviour{
 		else
 		{
 			Debug.Log(gameObject.name + " has taken"+damage+" damages. But no EffectsManager active");
-			health.ActualPv -= damage;
+			health.actualPv -= damage;
 
 			afficherFluctuationLife(false, damage);
 		}
@@ -100,13 +103,13 @@ public class HealthBar : MonoBehaviour{
 
     public void setHeal(float pvHeal)
     {
-		health.ActualPv += pvHeal;
+		health.actualPv += pvHeal;
 
         afficherFluctuationLife(true, pvHeal);
 
-        if (health.ActualPv > health.TotalPv)
+        if (health.actualPv > health.totalPv)
         {
-			health.ActualPv = health.TotalPv;
+			health.actualPv = health.totalPv;
         }
 
         updateBar();
@@ -115,8 +118,8 @@ public class HealthBar : MonoBehaviour{
 
     public void upgradeTotalHp()
     {
-		health.TotalPv += 3;
-		health.ActualPv = health.TotalPv;
+		health.totalPv += 3;
+		health.actualPv = health.totalPv;
         updateBar();
     }
 	
@@ -162,11 +165,9 @@ public class HealthBar : MonoBehaviour{
 	public void load(Health n_health)
 	{
 		health = n_health;
+		correctBar = false;
 		updateBar();
 	}
-
-	
-
 }
 
 [Serializable]
@@ -175,35 +176,11 @@ public class Health {
 
 	[SerializeField]
 	[XmlAttribute("total")]
-	private float totalPv;
-	public float TotalPv
-	{
-		get
-		{
-			return totalPv;
-		}
-
-		set
-		{
-			totalPv = value;
-		}
-	}
+	public float totalPv;
 
 	[SerializeField]
 	[XmlAttribute("actual")]
-	private float actualPv;
-	public float ActualPv
-	{
-		get
-		{
-			return actualPv;
-		}
-
-		set
-		{
-			actualPv = value;
-		}
-	}
+	public float actualPv;
 
 	public Health()
 	{
@@ -213,7 +190,7 @@ public class Health {
 
 	public float getPourcentagePv()
 	{
-		return (ActualPv / TotalPv);
+		return (actualPv / totalPv);
 	}
 
 	public void save(string fileName)

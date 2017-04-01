@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<Conversation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Phrase>
+    <Emotion>Content</Emotion>
+    <Texte>Bonjour</Texte>
+    <Reponses />
+  </Phrase>
+  <Phrase>
+    <Emotion>Heureux</Emotion>
+    <Texte>CA VA ?</Texte>
+    <Reponses>
+      <Reponse>
+        <TexteReponse>oui</TexteReponse>
+        <Phrase>
+          <Emotion>Enerve</Emotion>
+          <Texte>Tant mieux pour vous</Texte>
+          <Reponses />
+        </Phrase>
+      </Reponse>
+      <Reponse>
+        <TexteReponse>non</TexteReponse>
+        <Phrase>
+          <Emotion>Triste</Emotion>
+          <Texte>Dommage</Texte>
+          <Reponses />
+        </Phrase>
+      </Reponse>
+    </Reponses>
+  </Phrase>
+</Conversation>

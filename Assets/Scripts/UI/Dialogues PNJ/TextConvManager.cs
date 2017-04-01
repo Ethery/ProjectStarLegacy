@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Xml.Serialization;
-using System.IO;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -11,7 +10,7 @@ public class TextConvManager : MonoBehaviour {
 
 	private int currentPhrase;
 	public bool isActive, updated;
-	public Conversation fileConversation;
+	public Conversation mainConversation;
 	private List<Phrase> currentConv;
 	public GameObject display;
 	public Transform buttonGroup;
@@ -25,6 +24,8 @@ public class TextConvManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		TestDialoguesXML test = new TestDialoguesXML();
+		test.Start();
 		for (int i = 0; i < buttonGroup.childCount; i++)
 		{
 			buttonGroup.GetChild(i).name = i.ToString();
@@ -37,9 +38,9 @@ public class TextConvManager : MonoBehaviour {
 		//Si le dialogue n'a pas �t� update et est actif
 		if (!updated && isActive)
 		{
-			//on update le texte
 			UpdateTexts();
 		}
+		
 
 		//Si on appuie le bouton d'action et que le dialogue est actif
 		if (Input.GetButtonUp("Submit") && isActive)
@@ -173,7 +174,7 @@ public class TextConvManager : MonoBehaviour {
 		if (active)
 		{
 			display.gameObject.SetActive(isActive);
-			currentConv = fileConversation.phrases;
+			currentConv = mainConversation;
 			Time.timeScale = 0f;
 		}
 		else
@@ -188,7 +189,7 @@ public class TextConvManager : MonoBehaviour {
 		var serializer = new XmlSerializer(typeof(Conversation));
 		using (var reader = new System.IO.StringReader(fileName.text))
 		{
-			fileConversation = serializer.Deserialize(reader) as Conversation;
+			mainConversation = serializer.Deserialize(reader) as Conversation;
 		}
 		setActive(true);
 		currentPhrase = 0;

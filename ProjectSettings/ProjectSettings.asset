@@ -562,15 +562,15 @@ PlayerSettings:
   vrEditorSettings: {}
   cloudServicesEnabled:
     Analytics: 0
-    Build: 0
-    Collab: 0
+    Build: 1
+    Collab: 1
     ErrorHub: 0
     Game_Performance: 0
     Hub: 0
     Purchasing: 0
-    UNet: 0
+    UNet: 1
     Unity_Ads: 0
   cloudProjectId: 48a50c98-3110-409b-a005-f89b908437a7
-  projectName: test-jeu-plateform
+  projectName: Project StarLegacy
   organizationId: ethery
   cloudEnabled: 0

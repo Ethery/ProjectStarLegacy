@@ -7,6 +7,9 @@ public class MainGameManager : MonoBehaviour {
     public GameObject fadePrefab;
     private static Fading fadeObject;
 
+	public Health health;
+	public 
+
     #endregion
 
 

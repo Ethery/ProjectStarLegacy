@@ -31,13 +31,13 @@ public class CharacterManager : MonoBehaviour
 
 	private void Awake()
     {
-        // Setting up references.
         m_GroundCheck = transform.FindChild("GroundCheck").GetComponent<EdgeCollider2D>();
         m_CeilingCheck = transform.FindChild("CeilingCheck").GetComponent<Collider2D>();
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		weaponManager = GetComponent<PlayerWeaponManager>();
 		physicsCollider = transform.FindChild("hitbox").GetComponent<Collider2D>();
+
 	}
 
 

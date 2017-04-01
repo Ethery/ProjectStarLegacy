@@ -26,12 +26,12 @@ public class SavesManager : MonoBehaviour {
 		_im = GameObject.FindObjectOfType<InventoryManager>();
 		_im.init();
 		_player = GameObject.Find("Player").GetComponent<HealthBar>();
-		prog = new Progression();
-		main = new MainStatus();
+		//prog = new Progression();
 		switch (PlayerPrefs.GetInt("SessionID", 0))
 		{
 			case 0:
 				canSave = true;
+				main = new MainStatus();
 				main.init();
 				saveAll(PlayerPrefs.GetInt("SessionID", 0));
                 canSave = false;
@@ -174,7 +174,8 @@ public class Progression
 		var serializer = new XmlSerializer(typeof(Progression));
 
 		SavesManager.EnsureFolder(Application.dataPath + "/" + fileName);
-		var stream = new FileStream(Application.dataPath + "/" + fileName, FileMode.Create);
+		var encoding = Encoding.GetEncoding("UTF-8");
+		var stream = new StreamWriter(Application.dataPath + "/" + fileName, false, encoding);
 
 		serializer.Serialize(stream, this);
 		stream.Close();
@@ -231,7 +232,8 @@ public class MainStatus
 		var serializer = new XmlSerializer(typeof(MainStatus));
 
 		SavesManager.EnsureFolder(Application.dataPath + "/" + fileName);
-		var stream = new FileStream(Application.dataPath + "/" + fileName, FileMode.Create);
+		var encoding = Encoding.GetEncoding("UTF-8");
+		var stream = new StreamWriter(Application.dataPath + "/" + fileName, false, encoding);
 
 		serializer.Serialize(stream, this);
 		stream.Close();

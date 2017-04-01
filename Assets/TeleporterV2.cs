@@ -66,6 +66,7 @@ public class TeleporterV2 : MonoBehaviour {
 				FindObjectOfType<InputManager>().canMove = false;
 				fonduAnime.SetTrigger("start");
 				GetComponent<Animator>().SetTrigger("Started");
+				FindObjectOfType<InputManager>().canUse = false;
 				opened = false;
 				mainDisplay.SetActive(opened);
 				Time.timeScale = 1f;

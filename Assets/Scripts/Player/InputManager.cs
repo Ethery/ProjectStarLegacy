@@ -4,7 +4,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     private CharacterManager m_Character;
-    private bool m_Jump;
+    private bool m_Jump,released;
     private GameObject m_pnj;
     private int directionx = 0;
     private int directiony = 0;
@@ -13,6 +13,7 @@ public class InputManager : MonoBehaviour
     private void Awake()
     {
         m_Character = GetComponent<CharacterManager>();
+		released = true;
     }
 
     private void Update()
@@ -29,8 +30,17 @@ public class InputManager : MonoBehaviour
             return;
         }
 
+		if (Input.GetButtonDown("Jump") && released)
+		{
+			released = false;
+		}
+		if (Input.GetButtonUp("Jump") && !released)
+		{
+			released = true;
+		}
+
 		//Lecture input pour jump(ESPACE)
-		if (m_Character.isGrounded() && !transform.FindChild("button").gameObject.activeSelf)
+		if (m_Character.isGrounded() && released)
 		{
 			m_Jump = (Input.GetButtonDown("Jump"));
 		}

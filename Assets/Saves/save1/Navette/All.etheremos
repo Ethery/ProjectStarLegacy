@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <PlayerStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <checkPointId />
-  <HealthStatus>
-    <TotalPv>30</TotalPv>
-    <ActualPv>30</ActualPv>
-  </HealthStatus>
+  <HealthStatus total="30" actual="30" />
   <InventoryStatus />
 </PlayerStatus>
