@@ -4,13 +4,44 @@
     <Emotion>Content</Emotion>
     <Texte>Bonjour</Texte>
     <Reponses />
+    <Retour>false</Retour>
   </Phrase>
   <Phrase>
     <Emotion>Heureux</Emotion>
     <Texte>CA VA ?</Texte>
     <Reponses>
-      <Reponse />
-      <Reponse />
+      <Reponse>
+        <TexteReponse>oui</TexteReponse>
+        <Phrase>
+          <Emotion>Enerve</Emotion>
+          <Texte>Tant mieux pour vous</Texte>
+          <Reponses>
+            <Reponse>
+              <TexteReponse>BLEH</TexteReponse>
+              <Phrase>
+                <Emotion>Triste</Emotion>
+                <Texte>Dommage</Texte>
+                <Reponses />
+                <Retour>false</Retour>
+              </Phrase>
+              <Retour>true</Retour>
+            </Reponse>
+          </Reponses>
+          <Retour>false</Retour>
+        </Phrase>
+        <Retour>true</Retour>
+      </Reponse>
+      <Reponse>
+        <TexteReponse>non</TexteReponse>
+        <Phrase>
+          <Emotion>Triste</Emotion>
+          <Texte>Dommage</Texte>
+          <Reponses />
+          <Retour>false</Retour>
+        </Phrase>
+        <Retour>false</Retour>
+      </Reponse>
     </Reponses>
+    <Retour>false</Retour>
   </Phrase>
 </Conversation>

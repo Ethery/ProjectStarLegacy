@@ -10,9 +10,9 @@ using System;
 [XmlRoot("Conversation")]
 public class Conversation : List<Phrase>
 {
-	public Conversation()
+	public Conversation() : base()
 	{
-		
+        this.Clear();
 	}
 }
 
@@ -26,24 +26,38 @@ public class Phrase
 	[XmlArray("Reponses")]
 	[XmlArrayItem("Reponse")]
 	public List<Reponse> Options;
+    
+    [XmlElement("Retour")]
+    public bool back;
+    [XmlIgnore]
+    public bool temp;
 
-	public Phrase()
+    public Phrase()
 	{
 		Emotion = "Error";
 		Texte = "Error";
 		Options = new List<Reponse>();
+        temp = false;
 	}
 
-	public Phrase(string em, string txt)
-	{
-		Emotion = em;
-		Texte = txt;
-		Options = new List<Reponse>();
-	}
+    public Phrase(string emotion, string txt)
+    {
+        Emotion = emotion;
+        Texte = txt;
+        Options = new List<Reponse>();
+    }
+    public Phrase(string emotion, string txt,bool tmp,bool b)
+    {
+        Emotion = emotion;
+        Texte = txt;
+        Options = new List<Reponse>();
+        temp = tmp;
+        back = b;
+    }
 
-	public Phrase(string em, string txt, List<Reponse> opts)
+    public Phrase(string emotion, string txt, List<Reponse> opts)
 	{
-		Emotion = em;
+		Emotion = emotion;
 		Texte = txt;
 		Options = opts;
 	}
@@ -52,22 +66,26 @@ public class Phrase
 [Serializable]
 public class Reponse
 {
-	[XmlElement("TexteReponse")]
-	public string Text;
-	[XmlElement("Phrase")]
-	public Conversation Resultat;
+    [XmlElement("TexteReponse")]
+    public string Text;
+    [XmlElement("Phrase")]
+    public Conversation Resultat;
+    [XmlElement("Retour")]
+    public bool back;
 
-	public Reponse()
-	{
-		Text = "Error";
-		Resultat = new Conversation();
-	}
+    public Reponse()
+    {
+        Text = "Error";
+        Resultat = new Conversation();
+        back = false;
+    }
 
-	public Reponse(string txt, Conversation p)
-	{
-		Text = txt;
-		Resultat = p;
-	}
+    public Reponse(string txt, Conversation p,bool a)
+    {
+        Text = txt;
+        Resultat = p;
+        back = a;
+    }
 }
 
 
@@ -99,10 +117,11 @@ public class TestDialoguesXML
 		repOui.Add(new Phrase("Enerve", "Tant mieux pour vous"));
 		Conversation repNon = new Conversation();
 		repNon.Add(new Phrase("Triste", "Dommage"));
+        repOui[0].Options.Add(new Reponse("BLEH", repNon,true));
 
-		List<Reponse> reps = new List<Reponse>();
-		reps.Add(new Reponse("oui", repOui));
-		reps.Add(new Reponse("non", repNon));
+        List<Reponse> reps = new List<Reponse>();
+		reps.Add(new Reponse("oui", repOui,true));
+		reps.Add(new Reponse("non", repNon,false));
 
 
 		Conversation conv = new Conversation();

@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<PlayerStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <checkPointId />
-  <HealthStatus total="30" actual="30" />
-  <InventoryStatus />
-</PlayerStatus>

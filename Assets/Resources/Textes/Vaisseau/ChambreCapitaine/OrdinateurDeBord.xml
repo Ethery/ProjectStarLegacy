@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Conversation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Bonjour capitaine !
+      Je suis votre assistant personnel a bord du [key:NomVaisseau], bienvenue dans votre cabine.
+      Avez vous des questions ?
+    </Texte>
+    <Reponses>
+      <Reponse>
+        <TexteReponse>Est-ce que tu peut me résumer mes capacités ?</TexteReponse>
+        <Phrase>
+          <Emotion>Passif</Emotion>
+          <Texte>Vous pouvez bouger grâce au touches Q et D du clavier ou grace au joystick gauche de la manette.
+            Le saut quand à lui s'effectue grâce à la touche Espace ou au bouton A de la manette.
+          </Texte>
+          <Reponses/>
+          <Retour>true</Retour>
+        </Phrase>
+        <Retour>true</Retour>
+      </Reponse>
+      <Reponse>
+        <TexteReponse>J'aimerais des infos a propos des membres de l'équipage.</TexteReponse>
+        <Phrase>
+          <Emotion>Passif</Emotion>
+          <Texte>
+            État de l’équipage dans le [key:NomVaisseau]:
+[array:AvisEquipage6]{0:d} : {1:d}
+[endarray]</Texte>
+          <Reponses/>
+          <Retour>true</Retour>
+        </Phrase>
+        <Retour>true</Retour>
+      </Reponse>
+      <Reponse>
+        <TexteReponse>Rappelle moi notre objectif.</TexteReponse>
+        <Phrase>
+          <Emotion>Passif</Emotion>
+          <Texte>[key:ObjectifCourant]</Texte>
+          <Reponses/>
+        </Phrase>
+        <Retour>false</Retour>
+      </Reponse>
+    </Reponses>
+  </Phrase>
+  <!--
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Je suis l'instructeur. Ici afin de vous aider dans le debut de votre aventure.</Texte>
+    <Reponses/>
+  </Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Utilisez les touches Q et D ou le joystick gauche de la manette afin de vous deplacer et la touche Espace ou le bouton A de la manette afin de sauter.</Texte>
+    <Reponses />
+  </Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Faites attention, sur certaines planete la gravité est trés faible. Un simple saut peut vous emener dans l'espace.</Texte>
+    <Reponses />
+  </Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Vous pourrez trouver dans certaines de vos missions. Une fois ces objets recupéres vous pouvez en avoir une vue dans votre inventaire (touche i/Bouton Select)</Texte>
+    <Reponses />
+  </Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Si vous avez des questions supplementaires n'hésitez pas à regarder sur l'ordinateur de bord. Il pourra vous fournir toutes les lecons necessaires.</Texte>
+    <Reponses />
+  </Phrase>
+  <Phrase>
+    <Emotion>Heureux</Emotion>
+    <Texte>Bon courage Capitaine.</Texte>
+    <Reponses>
+      <Reponse>
+        <TexteReponse>Merci.</TexteReponse>
+        <Resultat/>
+        <Retour>true</Retour>
+      </Reponse>
+    </Reponses>
+  </Phrase>
+  -->
+</Conversation>

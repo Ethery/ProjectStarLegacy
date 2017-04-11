@@ -97,7 +97,6 @@ public class PlayerWeaponManager : MonoBehaviour
 
 	public void changeWeapon()
 	{
-		Debug.Log("PENIS");
 		if (weapons.Count > 1)
 		{
 			if (GetComponentInChildren<PlayerWeapon>() != null)
@@ -151,7 +150,7 @@ public class PlayerWeaponManager : MonoBehaviour
 
 	public void flipWeapons(bool right,bool first)
 	{
-		if (GetComponentInChildren<PlayerWeapon>() != null)
+		/*if (GetComponentInChildren<PlayerWeapon>() != null)
 		{
 			GetComponentInChildren<PlayerWeapon>().GetComponent<SpriteRenderer>().flipX = !right;
 			if (first && right)
@@ -165,6 +164,6 @@ public class PlayerWeaponManager : MonoBehaviour
 			else{
 				GetComponentInChildren<PlayerWeapon>().transform.localPosition = new Vector3(-GetComponentInChildren<PlayerWeapon>().transform.localPosition.x, GetComponentInChildren<PlayerWeapon>().transform.localPosition.y, GetComponentInChildren<PlayerWeapon>().transform.localPosition.z);
 			}
-		}
+		}*/
 	}
 }

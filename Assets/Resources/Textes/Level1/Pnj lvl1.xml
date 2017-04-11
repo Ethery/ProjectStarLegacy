@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Conversation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <Phrase>
-      <Emotion>Passif</Emotion>
-      <Texte>Bonjour !</Texte>
-      <Reponses />
-    </Phrase>
-    <Phrase>
-      <Emotion>Passif</Emotion>
-      <Texte>Je suis un pnj. Ici afin de vous aider dans le debut de votre aventure.</Texte>
-      <Reponses/>
-    </Phrase>
-    <Phrase>
-      <Emotion>Passif</Emotion>
-      <Texte>Utilisez les touches Q et D ou le joystick gauche de la manette afin de vous deplacer et la touche Espace ou le bouton A de la manette afin de sauter.</Texte>
-      <Reponses />
-    </Phrase>
-    <Phrase>
-      <Emotion>Passif</Emotion>
-      <Texte>Faites attention, sur cette planete la gravitï¿½ est trï¿½s faible. Un simple saut peut vous emener dans l'espace.</Texte>
-      <Reponses />
-    </Phrase>
-    <Phrase>
-      <Emotion>Heureux</Emotion>
-      <Texte>Bon courage aventurier.</Texte>
-      <Reponses>
-        <Reponse>
-          <TexteReponse>Merci Mr PNJ</TexteReponse>
-          <Resultat/>
-        </Reponse>
-        <Reponse>
-          <TexteReponse>Au Revoir</TexteReponse>
-          <Resultat/>
-        </Reponse>
-      </Reponses>
-    </Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Bonjour !</Texte>
+    <Reponses />
+  </Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Je suis un pnj. Ici afin de vous aider dans le debut de votre aventure.</Texte>
+    <Reponses/>
+  </Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Utilisez les touches Q et D ou le joystick gauche de la manette afin de vous deplacer et la touche Espace ou le bouton A de la manette afin de sauter.</Texte>
+    <Reponses />
+  </Phrase>
+  <Phrase>
+    <Emotion>Passif</Emotion>
+    <Texte>Faites attention, sur cette planete la gravité est trés faible. Un simple saut peut vous emener dans l'espace.</Texte>
+    <Reponses />
+  </Phrase>
+  <Phrase>
+    <Emotion>Heureux</Emotion>
+    <Texte>Bon courage aventurier.</Texte>
+    <Reponses>
+      <Reponse>
+        <TexteReponse>Merci Mr PNJ</TexteReponse>
+        <Resultat/>
+      </Reponse>
+      <Reponse>
+        <TexteReponse>Au Revoir</TexteReponse>
+        <Resultat/>
+      </Reponse>
+    </Reponses>
+  </Phrase>
 </Conversation>
 

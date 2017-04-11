@@ -4,6 +4,7 @@
     <Emotion>Content</Emotion>
     <Texte>Bonjour</Texte>
     <Reponses />
+    <Retour>false</Retour>
   </Phrase>
   <Phrase>
     <Emotion>Heureux</Emotion>
@@ -14,8 +15,21 @@
         <Phrase>
           <Emotion>Enerve</Emotion>
           <Texte>Tant mieux pour vous</Texte>
-          <Reponses />
+          <Reponses>
+            <Reponse>
+              <TexteReponse>BLEH</TexteReponse>
+              <Phrase>
+                <Emotion>Triste</Emotion>
+                <Texte>Dommage</Texte>
+                <Reponses />
+                <Retour>false</Retour>
+              </Phrase>
+              <Retour>true</Retour>
+            </Reponse>
+          </Reponses>
+          <Retour>false</Retour>
         </Phrase>
+        <Retour>true</Retour>
       </Reponse>
       <Reponse>
         <TexteReponse>non</TexteReponse>
@@ -23,8 +37,11 @@
           <Emotion>Triste</Emotion>
           <Texte>Dommage</Texte>
           <Reponses />
+          <Retour>false</Retour>
         </Phrase>
+        <Retour>false</Retour>
       </Reponse>
     </Reponses>
+    <Retour>false</Retour>
   </Phrase>
 </Conversation>

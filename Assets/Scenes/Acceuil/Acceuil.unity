@@ -100,6 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 15212856}
   - component: {fileID: 15212857}
+  - component: {fileID: 15212858}
   m_Layer: 5
   m_Name: _MainGameManager
   m_TagString: Untagged
@@ -137,6 +138,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadePrefab: {fileID: 1000010074303942, guid: a1ed0d64fb924ae4fab227886f2252c7, type: 2}
+  health:
+    totalPv: 1
+    actualPv: 1
+--- !u!114 &15212858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 15212855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69a28e760a300db43b1d64b6cbe23b72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textes:
+  - name: conversations
+    txts:
+    - Blah indication 1
 --- !u!1 &242247006
 GameObject:
   m_ObjectHideFlags: 0

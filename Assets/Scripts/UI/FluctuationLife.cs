@@ -20,7 +20,6 @@ public class FluctuationLife : MonoBehaviour {
     void Start () {
 		GetComponent<Text>().color = color;
 		GetComponent<Text>().text = txt;
-
 		Destroy(gameObject, 3); // 3sec
     }
 	

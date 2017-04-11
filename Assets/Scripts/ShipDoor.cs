@@ -62,7 +62,7 @@ public class ShipDoor : MonoBehaviour {
 		if (collision.GetComponent<CharacterManager>() != null)
 		{
 			ranged = true;
-			collision.GetComponent<InputManager>().canUse = ranged && !opened;
+			collision.GetComponent<PlayerInputManager>().canUse = ranged && !opened;
 		}
 	}
 
@@ -71,7 +71,7 @@ public class ShipDoor : MonoBehaviour {
 		if (collision.GetComponent<CharacterManager>() != null && opened)
 		{
 			ranged = false;
-			collision.GetComponent<InputManager>().canUse = ranged;
+			collision.GetComponent<PlayerInputManager>().canUse = ranged;
 		}
 	}
 }

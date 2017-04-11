@@ -17,18 +17,16 @@ public class HealthBar : MonoBehaviour{
 	public Color colorHightHpLevel;
 	public Color colorMidHpLevel;
 	public Color colorLowHpLevel;
-	
-	public FluctuationLife dialogue;
-	public Color healColor;
-	public Color damagesColor;
 
-	[SerializeField]
+    public FluctuationLife dialogue;
+    public static Color healColor = Color.green;
+	public static Color damagesColor = Color.red;
+    
 	public Health health;
 
 	public float damage;
 	
     void Start () {
-		//health = new Health();
 		if (healthBar != null)
 		{
 			jauge = healthBar.transform.FindChild("Vie").GetComponent<Image>();
@@ -51,7 +49,7 @@ public class HealthBar : MonoBehaviour{
 
     public void updateBar()
     {
-		if (health.actualPv <= 0)
+        if (health.actualPv <= 0)
 		{
 			FindObjectOfType<Fading>().FadeTo(SceneManager.GetActiveScene().name);
 			return;
@@ -82,18 +80,16 @@ public class HealthBar : MonoBehaviour{
 		if (GetComponent<EffectsManager>() != null)
 		{
 			if (!GetComponent<EffectsManager>().effets[GetComponent<EffectsManager>().Invincible].actif)
-			{
-				health.actualPv -= damage;
+            {
+                health.actualPv -= damage;
 
-				afficherFluctuationLife(false, damage);
+				afficherFluctuationLife(dialogue,transform,false, damage);
 			}
 		}
 		else
 		{
-			Debug.Log(gameObject.name + " has taken"+damage+" damages. But no EffectsManager active");
 			health.actualPv -= damage;
-
-			afficherFluctuationLife(false, damage);
+			afficherFluctuationLife(dialogue,transform,false, damage);
 		}
 		
 		updateBar();
@@ -105,7 +101,7 @@ public class HealthBar : MonoBehaviour{
     {
 		health.actualPv += pvHeal;
 
-        afficherFluctuationLife(true, pvHeal);
+        afficherFluctuationLife(dialogue, transform, true, pvHeal);
 
         if (health.actualPv > health.totalPv)
         {
@@ -123,15 +119,14 @@ public class HealthBar : MonoBehaviour{
         updateBar();
     }
 	
-    public void afficherFluctuationLife(bool isHeal, float value)
+    public static void afficherFluctuationLife(FluctuationLife dialogue,Transform parent, bool isHeal, float value)
     {
         if (dialogue != null)
         {
-            // Création d'un objet copie du prefab
-            var dialoguef = Instantiate(dialogue) as FluctuationLife;
-			dialoguef.transform.SetParent(transform);
 
-			dialoguef.transform.position = transform.position;
+            // Création d'un objet copie du prefab
+            FluctuationLife dialoguef = Instantiate(dialogue,parent,false);
+            Debug.Log("fluct");
 
             if (isHeal)
             {
@@ -165,7 +160,6 @@ public class HealthBar : MonoBehaviour{
 	public void load(Health n_health)
 	{
 		health = n_health;
-		correctBar = false;
 		updateBar();
 	}
 }

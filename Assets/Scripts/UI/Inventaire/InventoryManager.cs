@@ -146,7 +146,7 @@ public class InventoryManager : MonoBehaviour {
 		Time.timeScale = 0f;
 		opened = true;
 		display.SetActive(true);
-		GameObject.Find("Player").GetComponent<InputManager>().canMove = false;
+		GameObject.Find("Player").GetComponent<PlayerInputManager>().canMove = false;
 		EventSystem.current.SetSelectedGameObject(null);
 		if (listeButton.childCount != 0)
 		{
@@ -161,7 +161,7 @@ public class InventoryManager : MonoBehaviour {
 		Time.timeScale = 1f;
 		opened = false;
 		display.SetActive(false);
-		GameObject.Find("Player").GetComponent<InputManager>().canMove = true;
+		GameObject.Find("Player").GetComponent<PlayerInputManager>().canMove = true;
 	}
 
 	public void useItem()

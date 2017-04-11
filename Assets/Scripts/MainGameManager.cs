@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class MainGameManager : MonoBehaviour {
 
+    #region Noms globaux
+    public static string NOM_VAISSEAU = "Voiron";
+
+    #endregion
+
     #region Variables
 
     public GameObject fadePrefab;

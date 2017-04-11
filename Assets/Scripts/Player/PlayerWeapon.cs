@@ -15,17 +15,7 @@ public class PlayerWeapon : MonoBehaviour {
 
 
 	public int shotDamages = 1;
-
-
-	void Start()
-	{
-		//anim = GetComponent<Animator>();
-	}
-
-	void Update()
-	{
-	}
-
+    
 	public void Attack(Vector2 dir)
 	{
 		// Création d'un objet copie du prefab
@@ -43,15 +33,16 @@ public class PlayerWeapon : MonoBehaviour {
 			parameters.m_direction = dir;
 		}
 		var rad = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg; // In radians
-		if (GetComponent<SpriteRenderer>().flipX)
+        Debug.Log(rad);
+		if (rad < 90 && rad > -90)
 		{
-			transform.localRotation = Quaternion.AngleAxis(rad, Vector3.back);
-		}
+            GetComponent<SpriteRenderer>().flipY = false;
+        }
 		else
-		{
-			transform.localRotation = Quaternion.AngleAxis(rad, Vector3.forward);
-		}
-			
-	}
+        {
+            GetComponent<SpriteRenderer>().flipY = true;
+        }
+        transform.localRotation = Quaternion.AngleAxis(-rad, Vector3.back);
+    }
 	
 }
