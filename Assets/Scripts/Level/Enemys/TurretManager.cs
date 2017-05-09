@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Collider2D))]
@@ -38,7 +38,7 @@ public class TurretManager : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerStay2D(Collider2D other)
+	void OnTriggerEnter2D(Collider2D other)
 	{
 		if (target == null)
 		{
@@ -56,10 +56,7 @@ public class TurretManager : MonoBehaviour {
 
 	void OnTriggerExit2D(Collider2D other)
 	{
-		if (other.gameObject == target)
-		{
-			target = null;
-			m_Anim.SetBool("Activated", false);
-		}
+        target = null;
+        m_Anim.SetBool("Activated", false);
 	}
 }

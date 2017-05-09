@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class onclickInventory : MonoBehaviour, ISelectHandler
 {
@@ -17,7 +18,7 @@ public class onclickInventory : MonoBehaviour, ISelectHandler
 		{
 			if(transform.parent.GetChild(i) == transform)
 			{
-			FindObjectOfType<InventoryManager>().selected = i;
+			    FindObjectOfType<InventoryManager>().selected = i;
 			}
 		}
 		FindObjectOfType<InventoryManager>().goToFocus(false);

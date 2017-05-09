@@ -12,6 +12,7 @@ public class SavesManager : MonoBehaviour {
 
 	private InventoryManager _im;
 	private HealthBar _player;
+    private Stockage _stock;
 
 	public Progression prog;
 	public MainStatus main;
@@ -24,7 +25,8 @@ public class SavesManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		checkpoints = FindObjectOfType<CheckPoint>().transform.parent.GetComponentsInChildren<CheckPoint>();
-		_im = GameObject.FindObjectOfType<InventoryManager>();
+		_im = FindObjectOfType<InventoryManager>();
+        _stock = FindObjectOfType<Stockage>();
 		_im.init();
 		_player = GameObject.Find("Player").GetComponent<HealthBar>();
 		switch (PlayerPrefs.GetInt("SessionID", 0))
@@ -35,7 +37,7 @@ public class SavesManager : MonoBehaviour {
 				saveAll(PlayerPrefs.GetInt("SessionID", 0),true);
 				break;
 			default:
-                if (!File.Exists(Application.dataPath + "Saves/save" + PlayerPrefs.GetInt("SessionID", 0) + "/" + SceneManager.GetActiveScene().name + "/All.etheremos"))
+                if (!File.Exists(Application.dataPath + "/Saves/save" + PlayerPrefs.GetInt("SessionID", 0) + "/" + SceneManager.GetActiveScene().name + "/All.etheremos"))
                 {
                     main = MainStatus.load("Saves/save" + PlayerPrefs.GetInt("SessionID", 0) + "/main.etheremos");
                     saveAll(PlayerPrefs.GetInt("SessionID", 0),true);
@@ -47,8 +49,7 @@ public class SavesManager : MonoBehaviour {
 
     void Update()
     {
-        /*Debug.Log("HEALTH:" + prog.health.totalPv);
-        */
+
     }
 
     public void saveAll(int saveNb)
@@ -69,8 +70,13 @@ public class SavesManager : MonoBehaviour {
 
                 _player.transform.position = checkpoints[0].transform.position;
             }
-            prog.save(_player.save(), _im.save(), "Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
-
+            prog.health = _player.save();
+            prog.save("Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
+            main.items = _im.getInventory();
+            if (_stock != null)
+            {
+                main.stock = _stock.getStock();
+            }
             main.lastVisitedLevel = SceneManager.GetActiveScene().name;
             main.save("Saves/save" + saveNb + "/main.etheremos");
             PlayerPrefs.SetInt("SessionID", saveNb);
@@ -98,7 +104,13 @@ public class SavesManager : MonoBehaviour {
 
                 _player.transform.position = checkpoints[0].transform.position;
             }
-            prog.save(_player.save(), _im.save(), "Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
+            prog.health = _player.save();
+            prog.save("Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
+            main.items = _im.getInventory();
+            if (_stock != null)
+            {
+                main.stock = _stock.getStock();
+            }
             main.lastVisitedLevel = SceneManager.GetActiveScene().name;
             foreach (TalkingManager item in FindObjectsOfType<TalkingManager>())
             {
@@ -123,26 +135,52 @@ public class SavesManager : MonoBehaviour {
         }
     }
 
+    public void addLevelObjects(Parameter obj)
+    {
+        if (prog.levelObjects.Contains(obj))
+        {
+            prog.levelObjects.Remove(obj);
+        }
+        prog.levelObjects.Add(obj);
+    }
+    public void addLevelObjects(List<Parameter> obj)
+    {
+        foreach (Parameter o in obj)
+        {
+            if (prog.levelObjects.Contains(o))
+            {
+                prog.levelObjects.Remove(o);
+            }
+            prog.levelObjects.Add(o);
+        }
+    }
+
+    public void saveStockInventory(Inventory stock, Inventory inventory)
+    {
+        main.items = inventory;
+        main.stock = stock;
+        main.save("Saves/save" + PlayerPrefs.GetInt("SessionID", 0) + "/main.etheremos");
+    }
+
+    public void saveInventory(Inventory inventory)
+    {
+        main.items = inventory;
+        main.save("Saves/save" + PlayerPrefs.GetInt("SessionID", 0) + "/main.etheremos");
+    }
+
     public void loadAll(int saveNb)
 	{
 		if (Directory.Exists(Application.dataPath + "/Saves"))
 		{
 			main = MainStatus.load("Saves/save" + saveNb + "/main.etheremos");
-
-            /*foreach (TalkingManager item in FindObjectsOfType<TalkingManager>())
-            {
-                AvisPNJ avisTmp = main.avis.Find(((e) => 
-                {
-                    return (e.name == item.name);
-                }));
-                if(avisTmp != null)
-                {
-                    item.avis = avisTmp;
-                }
-            }*/
-
+			
 			prog = Progression.load("Saves/save" + saveNb + "/" + SceneManager.GetActiveScene().name + "/All.etheremos");
-			_im.load(prog.items);
+			_im.load(main.items);
+            if (_stock != null)
+            {
+                _stock.load(main.stock);
+            }
+
 			_player.load(prog.health);
 			
 			CheckPoint tmp = checkpoints[0];
@@ -160,6 +198,14 @@ public class SavesManager : MonoBehaviour {
 					}
 				}
 			}
+
+            /*
+			string str = "";
+			for (int i = 0; i < prog.checkPointId.Count; i++)
+			{
+				str += prog.checkPointId[i] + ":";
+			}
+			Debug.Log("cp:" + str);*/
 			_player.transform.position = tmp.transform.position;
 		}
 	}
@@ -188,8 +234,6 @@ public class SavesManager : MonoBehaviour {
 			Directory.CreateDirectory(directoryName);
 		}
 	}
-
-
 }
 
 [Serializable]
@@ -201,23 +245,21 @@ public class Progression
 	[XmlElement("HealthStatus")]
 	public Health health;
 
-	[XmlArray("InventoryStatus")]
-	public Inventory items;
-	
+    public List<Parameter> levelObjects;
 
 	public Progression()
 	{
 		health = new Health();
-		items = new Inventory();
 		checkPointId = new List<string>();
+        levelObjects = new List<Parameter>();
 	}
 
 	public void reset()
 	{
 		health = new Health();
-		items = new Inventory();
 		checkPointId = new List<string>();
-	}
+        levelObjects = new List<Parameter>();
+    }
 
 	public static Progression load(string fileName)
 	{
@@ -232,10 +274,8 @@ public class Progression
 		return new Progression();
 	}
 
-	public void save(Health h, Inventory inv,string fileName)
+	public void save(string fileName)
 	{
-		health = h;
-		items = inv;
 		var serializer = new XmlSerializer(typeof(Progression));
 
 		SavesManager.EnsureFolder(Application.dataPath + "/" + fileName);
@@ -244,28 +284,35 @@ public class Progression
 
 		serializer.Serialize(stream, this);
 		stream.Close();
-		
 	}
 }
 
 
 [XmlRoot("MainStatus")]
+[Serializable]
 public class MainStatus
 {
 	public string lastVisitedLevel;
     public List<LevelStats> levels;
     public List<AvisPNJ> avis;
+    [XmlArray(ElementName = "Stock", IsNullable = false, Order = 1)]
+    [XmlArrayItem("Item")]
+    public Inventory stock;
+    [XmlArray(ElementName = "Inventory", IsNullable = false, Order = 2)]
+    [XmlArrayItem("Item")]
+    public Inventory items;
 
-	public MainStatus()
+    public MainStatus()
 	{
 		lastVisitedLevel = "";
 		levels = new List<LevelStats>();
         avis = new List<AvisPNJ>();
-	}
+        items = new Inventory();
+        stock = new Inventory();
+    }
 
 	public void init()
 	{
-		levels = new List<LevelStats>();
 		for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
 		{
 			levels.Add(new LevelStats(i, SceneManager.GetSceneByBuildIndex(i).name, false));
@@ -305,8 +352,8 @@ public class MainStatus
 	}
 
 	public void save(string fileName)
-	{
-		var serializer = new XmlSerializer(typeof(MainStatus));
+    {
+        var serializer = new XmlSerializer(typeof(MainStatus));
 
 		SavesManager.EnsureFolder(Application.dataPath + "/" + fileName);
 		var encoding = Encoding.GetEncoding("UTF-8");
@@ -314,7 +361,6 @@ public class MainStatus
 
 		serializer.Serialize(stream, this);
 		stream.Close();
-
 	}
 }
 

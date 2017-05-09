@@ -2,36 +2,16 @@ using UnityEngine;
 using System;
 using System.Xml.Serialization;
 
-public class TalkingManager : MonoBehaviour {
+public class TalkingManager : Interactable {
     
 	public TextAsset textFile;
     public bool HasAvis;
 
     public AvisPNJ avis;
-	private bool ranged,canTalk;
-    
-	private void Update ()
+
+	private void Start()
 	{
-		if (!FindObjectOfType<TextConvManager>().isActive && ranged && Input.GetButtonDown("Submit"))
-		{
-            if (HasAvis)
-            {
-                avis = FindObjectOfType<SavesManager>().main.avis.Find(((e) =>
-                {
-                    return (e.name == gameObject.name);
-                }));
-                if (avis == null)
-                {
-                    avis = new AvisPNJ(gameObject.name, 50);
-                    FindObjectOfType<SavesManager>().main.avis.Add(avis);
-                    if(FindObjectOfType<DisplayAvisHUD>()!= null)
-                    {
-                        FindObjectOfType<DisplayAvisHUD>().toUpdate = true;
-                    }
-                }
-            }
-            FindObjectOfType<TextConvManager>().StartNewConv(textFile,gameObject.name);
-		}
+		active = false;
 	}
 
 	private void OnTriggerStay2D(Collider2D collision)
@@ -39,7 +19,6 @@ public class TalkingManager : MonoBehaviour {
 		if (collision.tag == "Player")
 		{
 			ranged = true;
-            FindObjectOfType<PlayerInputManager>().canUse = true;
 		}
 	}
 
@@ -48,8 +27,57 @@ public class TalkingManager : MonoBehaviour {
 		if (collision.tag == "Player")
 		{
 			ranged = false;
-            FindObjectOfType<PlayerInputManager>().canUse = false;
         }
+	}
+
+	public override void Activate(bool a)
+	{
+        if (!a)
+        {
+            active = false;
+        }
+	}
+
+	public override bool Activate(bool a,string key)
+	{
+		if (a && key == "Submit")
+		{
+			active = a;
+			init();
+			return true;
+		}
+		if(!a && key == "Cancel")
+		{
+			active = a;
+			return FindObjectOfType<TextConvManager>().Activate(false,"Cancel");
+		}
+		return false;
+	}
+
+	public override bool nextStep(string key)
+	{
+		return FindObjectOfType<TextConvManager>().nextStep(key);
+	}
+
+	public override void init()
+	{
+		if (HasAvis)
+		{
+			avis = FindObjectOfType<SavesManager>().main.avis.Find(((e) =>
+			{
+				return (e.name == gameObject.name);
+			}));
+			if (avis == null)
+			{
+				avis = new AvisPNJ(gameObject.name, 50);
+				FindObjectOfType<SavesManager>().main.avis.Add(avis);
+				if (FindObjectOfType<DisplayAvisHUD>() != null)
+				{
+					FindObjectOfType<DisplayAvisHUD>().toUpdate = true;
+				}
+			}
+		}
+		FindObjectOfType<TextConvManager>().StartNewConv(textFile, gameObject.name);
 	}
 }
 

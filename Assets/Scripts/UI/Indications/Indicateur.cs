@@ -5,7 +5,7 @@ using System.Collections;
 public class Indicateur : MonoBehaviour {
 
 	public float delai;
-    public string name;
+    public string nom;
 	Indications txts;
 	public float tempsDAffichage;
 	public AnimationCurve curve;
@@ -15,7 +15,7 @@ public class Indicateur : MonoBehaviour {
 		delai = 0f;
 		txts = FindObjectOfType<Indications>();
         if (txts != null)
-            GetComponent<Text>().text = txts.getRandom(name);
+            GetComponent<Text>().text = txts.getRandom(nom);
         else
             GetComponent<Text>().text = "ATTENTION ! INDICATIONS MANQUANTES(ceci est un message d'erreur)";
 
@@ -33,7 +33,7 @@ public class Indicateur : MonoBehaviour {
             }
             if (delai > tempsDAffichage)
             {
-                GetComponent<Text>().text = txts.getRandom(name);
+                GetComponent<Text>().text = txts.getRandom(nom);
                 StartCoroutine(fadeIn());
                 delai = 0f;
             }

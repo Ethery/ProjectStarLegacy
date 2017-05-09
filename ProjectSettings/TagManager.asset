@@ -28,7 +28,7 @@ TagManager:
   - 
   - 
   - PNJHitbox
-  - Objects
+  - Lootable
   - EnemyHitbox
   - PlayerHitbox
   - EnemyPhysics
@@ -38,7 +38,7 @@ TagManager:
   - PlayerShots
   - EnemyShots
   - RangeDetectors
-  - 
+  - Object
   - 
   - 
   - 
@@ -60,6 +60,9 @@ TagManager:
     locked: 0
   - name: Platforms
     uniqueID: 3940858523
+    locked: 0
+  - name: Objects
+    uniqueID: 2770104923
     locked: 0
   - name: Characters
     uniqueID: 771169021

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Conversation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Phrase>
+    <Emotion>Content</Emotion>
+    <Texte>
+      Que venez vous faire ici capitaine ? Votre Équipage vous manques ?
+    </Texte>
+    <Reponses />
+  </Phrase> 
+</Conversation>

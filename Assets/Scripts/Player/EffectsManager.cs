@@ -303,7 +303,7 @@ public class EffectsManager : MonoBehaviour {
     
     public void ableEffect(int id,float time)
     {
-		Debug.Log("effect n°" + id + " has been abled for "+time+"s");
+		//Debug.Log("effect n°" + id + " has been abled for "+time+"s");
         effets[id].actif = true;
         effets[id].duree = time;
         effets[id].timerEffet = time;

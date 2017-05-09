@@ -6,19 +6,15 @@ using System.IO;
 using System.Xml.Serialization;
 using System;
 
-[RequireComponent(typeof(ObjectDictionary))]
-public class InventoryManager : MonoBehaviour {
+public class InventoryManager : Interactable {
 
 	public GameObject display;
 	public int selected;
 	
 	public GameObject slotPrefab;
-	public bool opened;
 
 	public bool onFocus;
-
-	[HideInInspector]
-	public bool first = true;
+    
 
 	public Transform listeButton;
 	public Transform description;
@@ -29,62 +25,70 @@ public class InventoryManager : MonoBehaviour {
 	public List<PlayerWeapon> weaponList;
 	public Dictionary<string, ObjectDictionaryItem> objectList;
 
-
+    public Inventory getInventory()
+    {
+        return _inventory;
+    }
+    
 	public void Start()
 	{
 		useButton = description.FindChild("UseButton");
 		deleteButton = description.FindChild("DeleteButton");
-		init();
-		updateAffichage("After Init");
+
+        FindObjectOfType<ObjectDictionary>().initList();
+        objectList = FindObjectOfType<ObjectDictionary>().list;
+
+        weaponList = new List<PlayerWeapon>();
+        _inventory = FindObjectOfType<SavesManager>().main.items;
+
+        active = display.activeSelf;
+        Activate(active);
+        int i = 0;
+        foreach (Item it in _inventory)
+        {
+            if (objectList[it.name].GetComponent<PlayerWeapon>() != null)
+            {
+                _inventory[i].stats.Add(new Stat("shotDamage", objectList[it.name].GetComponent<PlayerWeapon>().shotDamages));
+                _inventory[i].stats.Add(new Stat("Color.R", objectList[it.name].GetComponent<PlayerWeapon>().color.r));
+                _inventory[i].stats.Add(new Stat("Color.G", objectList[it.name].GetComponent<PlayerWeapon>().color.g));
+                _inventory[i].stats.Add(new Stat("Color.B", objectList[it.name].GetComponent<PlayerWeapon>().color.b));
+                weaponList.Add(objectList[_inventory[i].name].GetComponent<PlayerWeapon>());
+            }
+            if (objectList[it.name].GetComponent<Lootable>() != null)
+            {
+                _inventory[i].stats.Add(new Stat("Heal Amount", objectList[it.name].GetComponent<Lootable>().healAmount));
+            }
+            i++;
+        }
+        updateAffichage("After Init");
 	}
-
-	// Update is called once per frame
-	void Update ()
+    
+    
+	public override void init()
 	{
-		if (Input.GetButtonDown("Inventory") && !opened && Time.timeScale != 0f)
-		{
-			open();
-		}
-		else if (Input.GetButtonDown("Inventory") && opened)
-		{
-			close();
-		}
-		if (Input.GetButtonDown("Cancel") && opened && !onFocus )
-		{
-			close();
-		}
-		else if (Input.GetButtonDown("Cancel") && onFocus)
-		{
-			cancelFocus();
-		}
-	}
-
-
-	public void init()
-	{
-		GetComponent<ObjectDictionary>().initList();
-		objectList = GetComponent<ObjectDictionary>().list;
+		objectList = FindObjectOfType<ObjectDictionary>().list;
 		weaponList = new List<PlayerWeapon>();
 		_inventory = new Inventory();
 		
-		opened = display.activeSelf;
+		active = display.activeSelf;
+        Activate(active);
 
 		foreach (KeyValuePair<string,ObjectDictionaryItem> item in FindObjectOfType<ObjectDictionary>().list)
 		{
 			if (item.Value.owned > 0)
-			{
-				_inventory.Add(new Item(item.Value.nom, item.Value.owned, item.Value.tags));
-				if (item.Value.tags.Contains("Weapon"))
+            {
+                List<Stat> l = new List<Stat>();
+                if (item.Value.tags.Contains("Weapon"))
 				{
 					PlayerWeapon w = item.Value.GetComponent<PlayerWeapon>();
-					List<Stat> l = new List<Stat>();
 					l.Add(new Stat("damage", w.shotDamages));
 					l.Add(new Stat("color.R", w.color.r));
 					l.Add(new Stat("color.G", w.color.g));
 					l.Add(new Stat("color.B", w.color.b));
 					_inventory[_inventory.Count - 1].stats = l;
-				}
-			}
+                }
+                _inventory.Add(new Item(item.Value.nom, item.Value.owned, item.Value.tags,l,item.Value.description));
+            }
 		}
 
 		for (int i = 0; i < _inventory.Count; i++)
@@ -94,6 +98,7 @@ public class InventoryManager : MonoBehaviour {
 				weaponList.Add(objectList[_inventory[i].name].GetComponent<PlayerWeapon>());
 			}
 		}
+        
 	}
 
 	public void cancelFocus()
@@ -137,14 +142,13 @@ public class InventoryManager : MonoBehaviour {
 			description.FindChild("Nombre").GetComponentInChildren<Text>().text = "";
 			useButton.GetComponentInChildren<Button>().interactable = false;
 			deleteButton.GetComponentInChildren<Button>().interactable = false;
-
 		}
 	}
 
 	public void open()
 	{
 		Time.timeScale = 0f;
-		opened = true;
+		active = true;
 		display.SetActive(true);
 		GameObject.Find("Player").GetComponent<PlayerInputManager>().canMove = false;
 		EventSystem.current.SetSelectedGameObject(null);
@@ -154,12 +158,13 @@ public class InventoryManager : MonoBehaviour {
 		}
 		selected =0;
 		goToFocus(false);
+        updateAffichage("open");
 	}
 
 	public void close()
 	{
 		Time.timeScale = 1f;
-		opened = false;
+		active = false;
 		display.SetActive(false);
 		GameObject.Find("Player").GetComponent<PlayerInputManager>().canMove = true;
 	}
@@ -170,7 +175,7 @@ public class InventoryManager : MonoBehaviour {
 		if (objectList[item.name].GetComponent<Lootable>() != null)
 		{
 			objectList[item.name].GetComponent<Lootable>().use();
-			deleteItem();
+			deleteItemOnce();
 		}
 		else
 		{
@@ -178,102 +183,156 @@ public class InventoryManager : MonoBehaviour {
 		}
 	}
 
-	public void deleteItem()
-	{
-		Item item = _inventory[int.Parse(listeButton.GetChild(selected).name)];
-		item.owned -= 1;
-		if (item.owned == 0)
-		{
-			_inventory.Remove(item);
-			if (selected > 0)
-			{
-				selected -= 1;
-			}
-			EventSystem.current.SetSelectedGameObject(null);
-			if (listeButton.childCount != 0)
-			{
-				EventSystem.current.SetSelectedGameObject(listeButton.GetChild(selected).gameObject);
-			}
-			else
-			{
-				EventSystem.current.SetSelectedGameObject(useButton.gameObject);
-			}
-			updateAffichage("use last:"+listeButton.childCount);
-		}
-		else
-		{
-			updateAffichage("use not last");
-		}
-	}
+    public void deleteItemOnce()
+    {
+        Item item = _inventory[int.Parse(listeButton.GetChild(selected).name)];
+        item.owned -= 1;
+        if (item.owned <= 0)
+        {
+            _inventory.Remove(item);
+            if (selected > 0)
+            {
+                selected -= 1;
+            }
+            EventSystem.current.SetSelectedGameObject(null);
+            if (listeButton.childCount != 0)
+            {
+                EventSystem.current.SetSelectedGameObject(listeButton.GetChild(selected).gameObject);
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(useButton.gameObject);
+            }
+            updateAffichage("delete once last:" + listeButton.childCount);
+        }
+        else
+        {
+            updateAffichage("delete once");
+        }
+    }
 
-	//Si l'item existe dans l'inventaire on en ajoute le nombre necessaire. Sinon on en crée le nombre necessaire.
-	public void addItem(string name, int amount)
+    public void deleteItemAll(string nom)
+    {
+        Item exists = null;
+        foreach (Item itemOnce in _inventory)
+        {
+            if (itemOnce.name == nom)
+            {
+                exists = itemOnce;
+                break;
+            }
+        }
+
+        if (exists != null)
+        {
+            _inventory.Remove(exists);
+        }
+        if (selected > 0)
+        {
+            selected -= 1;
+        }
+        EventSystem.current.SetSelectedGameObject(null);
+        if (listeButton.childCount != 0)
+        {
+            EventSystem.current.SetSelectedGameObject(listeButton.GetChild(selected).gameObject);
+        }
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(useButton.gameObject);
+        }
+        updateAffichage("Item Deleted");
+    }
+
+    //Si l'item existe dans l'inventaire on en ajoute le nombre necessaire. Sinon on en crée le nombre necessaire.
+    public void addItem(ItemShort item)
 	{
 		Item exists = null;
-		foreach (Item item in _inventory)
+		foreach (Item itemOnce in _inventory)
 		{
-			if (item.name == name)
+			if (itemOnce.name == item.name)
 			{
-				exists = item;
+				exists = itemOnce;
 				break;
 			}
 		}
 		
 		if (exists != null)
 		{
-			exists.owned += amount;
+			exists.owned += item.owned;
 		}
 		else
 		{
-			Debug.Log(name + "::");
-			_inventory.Add(new Item(objectList[name].name, amount, objectList[name].tags));
-			if (objectList[name].GetComponent<PlayerWeapon>() != null)
-			{
-				_inventory[_inventory.Count - 1].stats.Add(new Stat("shotDamage", objectList[name].GetComponent<PlayerWeapon>().shotDamages));
-				_inventory[_inventory.Count - 1].stats.Add(new Stat("Color.R", objectList[name].GetComponent<PlayerWeapon>().color.r));
-				_inventory[_inventory.Count - 1].stats.Add(new Stat("Color.G", objectList[name].GetComponent<PlayerWeapon>().color.g));
-				_inventory[_inventory.Count - 1].stats.Add(new Stat("Color.B", objectList[name].GetComponent<PlayerWeapon>().color.b));
-			}
-			if (objectList[name].GetComponent<Lootable>() != null)
-			{
-				_inventory[_inventory.Count - 1].stats.Add(new Stat("Heal Amount", objectList[name].GetComponent<Lootable>().healAmount));
-			}
-		}
+            List<Stat> stats = new List<Stat>();
+            if (objectList.ContainsKey(item.name))
+            {
+                if (objectList[item.name].GetComponent<PlayerWeapon>() != null)
+                {
+                    stats.Add(new Stat("shotDamage", objectList[item.name].GetComponent<PlayerWeapon>().shotDamages));
+                    stats.Add(new Stat("Color.R", objectList[item.name].GetComponent<PlayerWeapon>().color.r));
+                    stats.Add(new Stat("Color.G", objectList[item.name].GetComponent<PlayerWeapon>().color.g));
+                    stats.Add(new Stat("Color.B", objectList[item.name].GetComponent<PlayerWeapon>().color.b));
+                    weaponList.Add(objectList[item.name].GetComponent<PlayerWeapon>());
+                }
+                if (objectList[item.name].GetComponent<Lootable>() != null)
+                {
+                    stats.Add(new Stat("Heal Amount", objectList[item.name].GetComponent<Lootable>().healAmount));
+                }
+
+                _inventory.Add(new Item(objectList[item.name].nom, item.owned, objectList[item.name].tags, stats, objectList[item.name].description));
+            }
+            else
+            {
+                Debug.LogWarning("Le dictionnaire ne contient pas l'item \"" + item.name + "\"");
+            }
+        }
 		updateAffichage("Add item");
 	}
 
-	public void save(string fileName)
-	{
-		_inventory.save(fileName);
-	}
+    public void setItemCount(ItemShort item)
+    {
+        if (item.owned == 0)
+        {
+            deleteItemAll(item.name);
+            return;
+        }
+        Item exists = null;
+        foreach (Item itemOnce in _inventory)
+        {
+            if (itemOnce.name == item.name)
+            {
+                exists = itemOnce;
+                break;
+            }
+        }
 
-	public Inventory save()
-	{
-		return _inventory;
-	}
-
-	public void load(string fileName)
-	{
-		_inventory = Inventory.load(fileName);
-		if (first)
-		{
-			init();
-			first = false;
-		}
-		updateAffichage("load inv w/ first = " + first);
-		selected = 0;
-		goToFocus(false);
-	}
-
+        if (exists != null)
+        {
+            exists.owned = item.owned;
+        }
+        else
+        {
+            List<Stat> l = new List<Stat>();
+            if (objectList[item.name].GetComponent<PlayerWeapon>() != null)
+            {
+                l.Add(new Stat("shotDamage", objectList[item.name].GetComponent<PlayerWeapon>().shotDamages));
+                l.Add(new Stat("Color.R", objectList[item.name].GetComponent<PlayerWeapon>().color.r));
+                l.Add(new Stat("Color.G", objectList[item.name].GetComponent<PlayerWeapon>().color.g));
+                l.Add(new Stat("Color.B", objectList[item.name].GetComponent<PlayerWeapon>().color.b));
+                weaponList.Add(objectList[item.name].GetComponent<PlayerWeapon>());
+            }
+            if (objectList[item.name].GetComponent<Lootable>() != null)
+            {
+                l.Add(new Stat("Heal Amount", objectList[item.name].GetComponent<Lootable>().healAmount));
+            }
+            _inventory.Add(new Item(objectList[item.name].nom, item.owned, objectList[item.name].tags,l, objectList[item.name].description));
+        }
+        updateAffichage("setItemCount");
+    }
+    
 	public void load(Inventory n_inv)
 	{
 		_inventory = n_inv;
-		if (first)
-		{
-			init();
-			first = false;
-		}
-		updateAffichage("load inv w/ first = " + first);
+		init();
 		selected = 0;
 	}
 
@@ -285,34 +344,26 @@ public class InventoryManager : MonoBehaviour {
 			Destroy(listeButton.GetChild(i).gameObject);
 		}
 		for (int i = 0; i < _inventory.Count; i++)
-		{
-			if (objectList.ContainsKey(_inventory[i].name))
+        {
+            if (objectList.ContainsKey(_inventory[i].name) && _inventory[i].owned > 0)
 			{
-				if (_inventory[i].owned > objectList[_inventory[i].name].stackValue)
-				{
-					int j = 0;
-					for (j = 0; j < Math.Ceiling((float)_inventory[i].owned / objectList[_inventory[i].name].stackValue) - 1; j++)
-					{
-						var slot = (Transform)Instantiate(slotPrefab.transform, listeButton, false);
-						slot.name = i.ToString();
-						slot.FindChild("Image").GetComponent<Image>().sprite = objectList[_inventory[i].name].GetComponent<SpriteRenderer>().sprite;
-						slot.FindChild("Text").GetComponent<Text>().text = _inventory[i].name;
-						slot.FindChild("Owned").GetComponent<Text>().text = (objectList[_inventory[i].name].stackValue).ToString();
-					}
-					var slot2 = (Transform)Instantiate(slotPrefab.transform, listeButton, false);
-					slot2.name = i.ToString();
-					slot2.FindChild("Image").GetComponent<Image>().sprite = objectList[_inventory[i].name].GetComponent<SpriteRenderer>().sprite;
-					slot2.FindChild("Text").GetComponent<Text>().text = _inventory[i].name;
-					slot2.FindChild("Owned").GetComponent<Text>().text = (_inventory[i].owned - (objectList[_inventory[i].name].stackValue * j)).ToString();
-				}
-				else
+                int owned = _inventory[i].owned;
+                for (int j = 0; j < Math.Ceiling((float)_inventory[i].owned / objectList[_inventory[i].name].stackValue); j++)
 				{
 					var slot = (Transform)Instantiate(slotPrefab.transform, listeButton, false);
 					slot.name = i.ToString();
 					slot.FindChild("Image").GetComponent<Image>().sprite = objectList[_inventory[i].name].GetComponent<SpriteRenderer>().sprite;
 					slot.FindChild("Text").GetComponent<Text>().text = _inventory[i].name;
-					slot.FindChild("Owned").GetComponent<Text>().text = _inventory[i].owned.ToString();
-				}
+                    if (owned > objectList[_inventory[i].name].stackValue)
+                    {
+                        slot.FindChild("Owned").GetComponent<Text>().text = (objectList[_inventory[i].name].stackValue).ToString();
+                    }
+                    else
+                    {
+                        slot.FindChild("Owned").GetComponent<Text>().text = (owned).ToString();
+                    }
+                    owned -= objectList[_inventory[i].name].stackValue;
+                }
 			}
 		}
 		if (_inventory.Count != 0)
@@ -331,44 +382,75 @@ public class InventoryManager : MonoBehaviour {
 			description.FindChild("Nombre").GetComponentInChildren<Text>().text = "";
 		}
 	}
+
+    public override bool Activate(bool a, string key)
+    {
+        if (key=="Inventory" && a)
+        {
+            open();
+            return true;
+        }
+        if (key == "Inventory" && !a)
+        {
+            close();
+            return true;
+        }
+        if (key == "Cancel" && !onFocus)
+        {
+            close();
+            return true;
+        }
+        if (key == "Cancel" && onFocus)
+        {
+            cancelFocus();
+            return true;
+        }
+        return false;
+    }
+
+    public override void Activate(bool a)
+    {
+        if (a && !active)
+        {
+            open();
+        }
+        if (active && !a)
+        {
+            close();
+        }
+        if (active && !onFocus)
+        {
+            close();
+        }
+        if (onFocus)
+        {
+            cancelFocus();
+        }
+    }
+
+    public override bool nextStep(string key)
+    {
+        return true;
+    }
 }
 
 [Serializable]
-[XmlRoot("Inventaire")]
 public class Inventory : List<Item>
 {
-	public Inventory() : base()
+    public Inventory() : base()
 	{
-		//this.Add(new Item());
-	}
-
-	public void save(string fileName)
-	{
-		var serializer = new XmlSerializer(typeof(Inventory));
-		var stream = new FileStream(Application.dataPath + "/"+fileName, FileMode.Create);
-
-		serializer.Serialize(stream, this);
-		stream.Close();
-	}
-
-	public static Inventory load(string fileName)
-	{
-		var serializer = new XmlSerializer(typeof(Inventory));
-		var stream = new FileStream(Application.dataPath + "/" + fileName, FileMode.Open);
-		var container = serializer.Deserialize(stream) as Inventory;
-		stream.Close();
-		return container;
+		
 	}
 }
 
-public class Item
+[Serializable]
+public class Item : ItemShort
 {
-	public string name, description;
-	public int owned;
+	public string description;
 	public List<string> tags;
 	public List<Stat> stats;
 
-	public Item()
+	public Item():base()
 	{
 		name = "Item";
 		description = "description";
@@ -378,16 +460,44 @@ public class Item
 		description = "";
 	}
 
-	public Item(string nname,int nd, List<string> tag)
-	{
-		name = nname;
-		tags = tag;
-		stats = new List<Stat>();
-		owned = nd;
-		description = "Description de " + name + ". CECI EST UN EXEMPLE ENCULÉ !";
-	}
+
+    public Item(string nname, int nd, List<string> tag, List<Stat> nstat, string desc) : base(nname, nd)
+    {
+        tags = tag;
+        stats = nstat;
+        description = desc;
+    }
+
+    public Item(Item item) : base(item.name,item.owned)
+    {
+        tags = item.tags;
+        stats = item.stats;
+        description = item.description;
+    }
+
+
 }
 
+[Serializable]
+public class ItemShort
+{
+    public string name;
+    public int owned;
+
+    public ItemShort()
+    {
+        name = "Item";
+        owned = 1;
+    }
+
+    public ItemShort(string nname, int nd)
+    {
+        name = nname;
+        owned = nd;
+    }
+}
+
+[Serializable]
 public class Stat
 {
 	public string name;

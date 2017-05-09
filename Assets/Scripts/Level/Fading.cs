@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using System.Collections;
 
 public class Fading : MonoBehaviour
@@ -39,6 +40,8 @@ public class Fading : MonoBehaviour
             }
             StartCoroutine(FadeIn());
             init = true;
+            scene = "";
+            sceneI = -1;
 			Time.timeScale = 1f;
 		}
     }
@@ -67,19 +70,24 @@ public class Fading : MonoBehaviour
             fadeOut = false;
             async.allowSceneActivation = true;
         }
-        if (SceneManager.GetActiveScene().name == scene && async.allowSceneActivation)
+        if ((SceneManager.GetActiveScene().name == scene || SceneManager.GetActiveScene().buildIndex == sceneI)&& async.allowSceneActivation)
         {
 			Time.timeScale = 1f;
 			if(FindObjectOfType<SavesManager>() != null)
 			FindObjectOfType<SavesManager>().main.levels[SceneManager.GetActiveScene().buildIndex].nom = SceneManager.GetActiveScene().name;
             StartCoroutine(FadeIn());
             scene = "";
+            sceneI = -1;
         }
 	}
 
 	IEnumerator FadeOut()
 	{
-		foreach (Canvas c in childs)
+        foreach (EventSystem es in FindObjectsOfType<EventSystem>())
+        {
+            es.gameObject.SetActive(false);
+        }
+        foreach (Canvas c in childs)
 		{
 			if (c.name == "LoadingScreen")
 			{
@@ -132,12 +140,15 @@ public class Fading : MonoBehaviour
 			progress.text = "Progress:" + async.progress + "%";
 			yield return progress;
 		}
-		scene = SceneManager.GetActiveScene().name;
     }
 
 	IEnumerator FadeIn()
 	{
-		img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
+        foreach (EventSystem es in FindObjectsOfType<EventSystem>())
+        {
+            es.gameObject.SetActive(true);
+        }
+        img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
         foreach (Canvas c in childs)
         {
             if (c.name == "LoadingScreen")

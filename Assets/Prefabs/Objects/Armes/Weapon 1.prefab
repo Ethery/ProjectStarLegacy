@@ -73,7 +73,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nom: Weapon 1
   stackValue: 1
-  owned: 1
+  owned: 0
+  description: Une arme de votre vaisseau.
   tags:
   - Weapon
 --- !u!114 &114841857714297334

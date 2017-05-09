@@ -1,8 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Seeker))]
+//[RequireComponent(typeof(Seeker))]
 public class IA : MonoBehaviour {
 
 	public float speed;
@@ -79,7 +79,6 @@ public class IA : MonoBehaviour {
 		{
 			canFlip = true;
 			charging = false;
-			enemyRB.velocity = new Vector2(0, 0);
 		}
 	}
 

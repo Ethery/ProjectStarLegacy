@@ -5,11 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System;
 
 public class TextConvManager : MonoBehaviour {
 
 	private int currentPhrase;
-	public bool isActive, updated;
+	public bool updated;
     public List<Conversation> cheminConversation;
 	private Conversation currentConv;
 	public GameObject display;
@@ -24,121 +25,36 @@ public class TextConvManager : MonoBehaviour {
 	public float typeSpeed;
     private int multipleDisplay,numberOfLines;
 
+	private bool active;
+
     public List<Sprite> sp;
 
 	// Use this for initialization
 	void Start () {
-       
-		TestDialoguesXML test = new TestDialoguesXML();
-		test.Start();
+		/*TestDialoguesXML test = new TestDialoguesXML();
+		test.Start();*/
 		for (int i = 0; i < buttonGroup.childCount; i++)
 		{
 			buttonGroup.GetChild(i).name = i.ToString();
 		}
-		setActive(false);
 	}
 	
 	void Update ()
 	{
         //Si le dialogue n'a pas �t� update et est actif
-        if (!updated && isActive)
+        if (!updated && active)
         {
             UpdateTexts();
             return;
 		}
-        if(isActive && EventSystem.current.currentSelectedGameObject == null && currentConv[currentPhrase].Options.Count != 0 && lastSelectedGameObject != null )
+        if(active && EventSystem.current.currentSelectedGameObject == null && currentConv[currentPhrase].Options.Count != 0 && lastSelectedGameObject != null )
         {
             EventSystem.current.SetSelectedGameObject(lastSelectedGameObject);
         }
-        if(isActive && currentConv[currentPhrase].Options.Count != 0)
+        if(active && currentConv[currentPhrase].Options.Count != 0)
         {
             lastSelectedGameObject = EventSystem.current.currentSelectedGameObject;
-        }
-
-
-        //Si on appuie le bouton d'action et que le dialogue est actif
-        if (Input.GetButtonDown("Submit") && isActive)
-		{
-			//Si la coroutine d'ecriture est en route
-			if (!isTyping)
-            {
-                // Si laphrase en cours a des options.
-                if (currentConv[currentPhrase].Options.Count != 0)
-				{
-					int number;
-					// On recupere l'id de la reponse
-					int.TryParse(EventSystem.current.currentSelectedGameObject.name, out number);
-
-                    //Si l'options selectionn�e n'a pas de resultat (mets fin a la conversation)
-                    if (currentConv[currentPhrase].Options[number].Resultat.Count == 0)
-					{
-                        //Si la reponse nous renvoie au dialogue precedent.
-                        if(currentConv[currentPhrase].Options[number].back)
-                        {
-                            currentConv = cheminConversation[cheminConversation.Count - 1];
-                            cheminConversation.RemoveAt(cheminConversation.Count - 1);
-                        }
-                        else
-                        {
-                            //On désactive la fenêtre.
-                            setActive(false);
-                        }
-					}
-
-
-                    // Sinon
-                    // \/
-
-                    cheminConversation.Add(currentConv);
-					// la nouvelle conv est le resultat de la r�ponse selectionn�e
-					currentConv = currentConv[currentPhrase].Options[number].Resultat;
-
-                    // On reset la phrase de la conv.
-                    currentPhrase = 0;
-                }
-                // Si la phrase n'a pas d'options
-                else
-                {
-                    // Si la conversation � une phrase suivante.
-                    if ((currentPhrase + 1) < currentConv.Count)
-                    {
-                        //On passe a la phrase suivante
-                        currentPhrase++;
-                        updated = false;
-					}
-					//Sinon
-					else
-                    {
-                        if (currentConv[currentPhrase].back)
-                        {
-                            currentConv = cheminConversation[cheminConversation.Count - 1];
-                            cheminConversation.RemoveAt(cheminConversation.Count - 1);
-                            currentPhrase = 0;
-                        }
-                        else
-                        {
-                            //On desactive la fenetre.
-                            setActive(false);
-                        }
-					}
-				}
-				updated = false;
-			}
-			else if (isTyping && !cancelTyping)
-			{
-				cancelTyping = true;
-			}
-		}
-
-        if(Input.GetButtonDown("Cancel") && isActive)
-        {
-            FindObjectOfType<SavesManager>().main.avis.Find(((e) =>
-            {
-                return (e.name == namePnj);
-            })).avis -= 10;
-            FindObjectOfType<DisplayAvisHUD>().toUpdate = true;
-            setActive(false);
-        }
+        }		
 	}
 
     public IEnumerator ParseText(Phrase phrase)
@@ -282,11 +198,9 @@ public class TextConvManager : MonoBehaviour {
             switch (tempLine.Substring(startKey + 5, endKey - startKey - 6))
             {
                 case "NomVaisseau":
-                    Debug.Log("found cle NomVaisseau    ");
                     tempLine = tempLine.Replace(tempLine.Substring(startKey, endKey - startKey), MainGameManager.NOM_VAISSEAU);
                     break;
                 case "ObjectifCourant":
-                    Debug.Log("found AvisEquipage[0,9]*");
                     tempLine = tempLine.Replace(tempLine.Substring(startKey, endKey - startKey), FindObjectOfType<SavesManager>().OBJECTIF_COURANT);
                     break;
                 default:
@@ -373,27 +287,11 @@ public class TextConvManager : MonoBehaviour {
 
 	public void UpdateTexts()
 	{
-		if (isActive)
+		if (active)
 		{
             StartCoroutine(ParseText(currentConv[currentPhrase]));
 			StartCoroutine(TextScroll(display.transform.FindChild("Texte").GetComponent<Text>()));
 			updated = true;
-		}
-	}
-
-	public void setActive(bool active)
-	{
-		isActive = active;
-		if (active)
-		{
-			display.gameObject.SetActive(isActive);
-			currentConv = cheminConversation[0];
-			Time.timeScale = 0f;
-		}
-		else
-		{
-			display.gameObject.SetActive(isActive);
-			Time.timeScale = 1f;
 		}
 	}
 
@@ -408,7 +306,128 @@ public class TextConvManager : MonoBehaviour {
             namePnj = PNJName;
             currentPhrase = 0;
             updated = false;
-            setActive(true);
+            Activate(true);
         }
+	}
+
+	public bool Activate(bool a, string key)
+	{
+		if (a)
+		{
+			active = a;
+			display.gameObject.SetActive(active);
+			Time.timeScale = 0f;
+			return true;
+		}
+		if (!a && key == "Cancel")
+		{
+			active = a;
+			FindObjectOfType<SavesManager>().main.avis.Find(((e) =>
+			{
+				return (e.name == namePnj);
+			})).avis -= 10;
+			FindObjectOfType<DisplayAvisHUD>().toUpdate = true;
+			display.gameObject.SetActive(active);
+			Time.timeScale = 1f;
+			return true;
+		}
+		return false;
+	}
+
+	public void Activate(bool a)
+	{
+		if (a)
+		{
+			active = a;
+			display.gameObject.SetActive(active);
+            Time.timeScale = 0f;
+		}
+		if (!a)
+		{
+			active = a;
+			display.gameObject.SetActive(active);
+			Time.timeScale = 1f;
+            foreach (TalkingManager talk in FindObjectsOfType<TalkingManager>())
+            {
+                talk.Activate(false);
+            }
+		}
+		
+	}
+
+	public bool nextStep(string key)
+	{
+		if (key == "Submit")
+		{
+			//Si la coroutine d'ecriture est en route
+			if (!isTyping)
+			{
+				// Si laphrase en cours a des options.
+				if (currentConv[currentPhrase].Options.Count != 0)
+				{
+					int number;
+					// On recupere l'id de la reponse
+					int.TryParse(EventSystem.current.currentSelectedGameObject.name, out number);
+
+					//Si l'options selectionn�e n'a pas de resultat (mets fin a la conversation)
+					if (currentConv[currentPhrase].Options[number].Resultat.Count == 0)
+					{
+						//Si la reponse nous renvoie au dialogue precedent.
+						if (currentConv[currentPhrase].Options[number].back)
+						{
+							currentConv = cheminConversation[cheminConversation.Count - 1];
+							cheminConversation.RemoveAt(cheminConversation.Count - 1);
+						}
+						else
+						{
+							//On désactive la fenêtre.
+							Activate(false);
+						}
+					}
+					// Sinon
+					// \/
+
+					cheminConversation.Add(currentConv);
+					// la nouvelle conv est le resultat de la r�ponse selectionn�e
+					currentConv = currentConv[currentPhrase].Options[number].Resultat;
+
+					// On reset la phrase de la conv.
+					currentPhrase = 0;
+				}
+				// Si la phrase n'a pas d'options
+				else
+				{
+					// Si la conversation � une phrase suivante.
+					if ((currentPhrase + 1) < currentConv.Count)
+					{
+						//On passe a la phrase suivante
+						currentPhrase++;
+						updated = false;
+					}
+					//Sinon
+					else
+					{
+						if (currentConv[currentPhrase].back)
+						{
+							currentConv = cheminConversation[cheminConversation.Count - 1];
+							cheminConversation.RemoveAt(cheminConversation.Count - 1);
+							currentPhrase = 0;
+						}
+						else
+						{
+							//On desactive la fenetre.
+							Activate(false);
+						}
+					}
+				}
+				updated = false;
+			}
+			else if (isTyping && !cancelTyping)
+			{
+				cancelTyping = true;
+			}
+			return true;
+		}
+		return false;
 	}
 }

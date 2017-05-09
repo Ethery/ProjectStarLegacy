@@ -4,21 +4,153 @@ using UnityEngine;
 public class PlayerInputManager : MonoBehaviour
 {
     private CharacterManager m_Character;
-    private bool m_Jump;
+	private Interactable[] ints;
+	private bool m_Jump;
     private GameObject m_pnj;
     private int directionx = 0;
     private int directiony = 0;
-    public bool canMove,canUse, released;
+
+    public bool canMove,canUse;
 
     private void Awake()
     {
         m_Character = GetComponent<CharacterManager>();
-		released = true;
+
+		ints = FindObjectsOfType<Interactable>();
+		foreach (Interactable i in ints)
+		{
+			i.Activate(false);
+		}
+		canUse = true;
     }
 
     private void Update()
 	{
-		transform.FindChild("button").gameObject.SetActive(canUse);
+
+		#region Verification de l'etat necessaire du bouton
+		bool found = false;
+		
+		foreach (Interactable a in ints)
+		{
+			if (a.isRanged() && a.needRanged())
+			{
+				//Debug.Log(a.name);
+				transform.FindChild("button").gameObject.SetActive(canUse && a.isRanged());
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			transform.FindChild("button").gameObject.SetActive(false);
+		}
+		#endregion
+
+		#region Submit
+
+		if (Input.GetButtonDown("Submit"))
+		{
+			foreach (Interactable a in ints)
+			{
+				if (!a.isActive() && a.isRanged() && canUse)
+				{
+					if (a.Activate(true,"Submit"))
+					{
+                        //Debug.Log(a.name);
+                        return;
+					}
+				}
+				if (a.isActive())
+				{
+					if (a.nextStep("Submit"))
+					{
+                        return;
+					}
+					else
+					{
+						a.Activate(false);
+					}
+					
+				}
+			}
+		}
+		#endregion
+
+		#region Cancel
+		if (Input.GetButtonDown("Cancel"))
+		{
+			foreach (Interactable a in ints)
+			{
+				if (a.isActive())
+				{
+					if (a.previousStep("Cancel"))
+					{
+						return;
+					}
+					else
+					{
+						if (a.Activate(false, "Cancel"))
+						{
+                            return;
+						}
+					}
+				}
+			}
+		}
+        #endregion
+
+        #region Inventaire
+
+        if (Input.GetButtonDown("Inventory"))
+        {
+            foreach (Interactable a in ints)
+            {
+                if (!a.isActive() && canUse)
+                {
+                    if (a.Activate(true, "Inventory"))
+                    {
+                        //Debug.Log(a.name);
+                        return;
+                    }
+                }
+                if (a.isActive())
+                {
+                    if (a.Activate(false, "Inventory"))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        a.Activate(false);
+                    }
+
+                }
+            }
+        }
+        #endregion
+
+        if (Input.GetButtonDown("Pause"))
+        {
+            foreach (Interactable a in ints)
+            {
+                if (!a.isActive())
+                {
+                    if (a.Activate(true, "Pause"))
+                    {
+                        Debug.Log("ok:" + a.name);
+                        return;
+                    }
+                }
+            }
+        }
+
+		if (Input.GetButtonDown("NextWeapon"))
+		{
+			m_Character.ChangeWeapon();
+			return;
+		}
+
+
 		// On reset les variables pour lire l'input suivante.
 		directionx = 0;
 		directiony = 0;
@@ -31,27 +163,12 @@ public class PlayerInputManager : MonoBehaviour
         }
 
         //Lecture input pour jump(ESPACE)
-        if (m_Character.isGrounded() && released)
+        if (m_Character.isGrounded()&& canMove)
         {
             m_Jump = (Input.GetButtonDown("Jump"));
         }
 
-        if (Input.GetButtonDown("Jump") && released)
-		{
-			released = false;
-		}
-		if (Input.GetButtonUp("Jump") && !released)
-		{
-			released = true;
-		}
-
-
 		
-
-		if (Input.GetButtonDown("NextWeapon"))
-		{
-			m_Character.ChangeWeapon();
-		}
 		
         //Lecture input pour s'accroupir (CTRL Gauche)
         bool crouch = false;//Input.GetKey(KeyCode.LeftControl);

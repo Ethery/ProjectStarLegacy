@@ -33,7 +33,6 @@ public class PlayerWeapon : MonoBehaviour {
 			parameters.m_direction = dir;
 		}
 		var rad = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg; // In radians
-        Debug.Log(rad);
 		if (rad < 90 && rad > -90)
 		{
             GetComponent<SpriteRenderer>().flipY = false;

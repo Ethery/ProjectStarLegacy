@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Conversation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Phrase>
     <Emotion>Passif</Emotion>
@@ -23,8 +23,7 @@
         <TexteReponse>J'aimerais des infos a propos des membres de l'équipage.</TexteReponse>
         <Phrase>
           <Emotion>Passif</Emotion>
-          <Texte>
-            État de l’équipage dans le [key:NomVaisseau]:
+          <Texte>État de l’équipage du [key:NomVaisseau]:
 [array:AvisEquipage6]{0:d} : {1:d}
 [endarray]</Texte>
           <Reponses/>

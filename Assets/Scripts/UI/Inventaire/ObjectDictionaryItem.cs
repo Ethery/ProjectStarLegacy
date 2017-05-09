@@ -6,6 +6,7 @@ public class ObjectDictionaryItem : MonoBehaviour
 {
 	public string nom;
 	public int stackValue, owned;
+    public string description;
 
 	[SerializeField]
 	public List<string> tags;
@@ -15,5 +16,6 @@ public class ObjectDictionaryItem : MonoBehaviour
 		stackValue = 0;
 		owned = 0;
 		tags = new List<string>();
+        description = "";
 	}
 }

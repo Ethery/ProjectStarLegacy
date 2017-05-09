@@ -35,7 +35,6 @@ public class CheckPoint : MonoBehaviour {
 				activated = true;
 			}
 			saved = true;
-			Debug.Log(saved);
 		}
 	}
 

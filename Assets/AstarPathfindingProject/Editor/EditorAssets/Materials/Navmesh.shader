@@ -10,6 +10,7 @@ Properties {
 SubShader {
 
 	Pass {
+		ZWrite On
 		ColorMask 0
 	}
 
@@ -20,8 +21,7 @@ SubShader {
 
 	Offset -2, -20
 	Cull Off
-	Lighting On
-
+	
 	Pass {
 		ZWrite Off
 		ZTest Greater
@@ -32,20 +32,17 @@ SubShader {
 		#pragma fragment frag
 
 		#include "UnityCG.cginc"
+		#include "Navmesh.cginc"
 
 		sampler2D _MainTex;
 		float _Scale;
+		float4 _Color;
 		float4 _FadeColor;
-
-		struct appdata_color {
-			float4 vertex : POSITION;
-			fixed4 color : COLOR;
-		};
 
 		struct v2f {
 			float4  pos : SV_POSITION;
 			float2  uv : TEXCOORD0;
-			half4 col : COLOR;
+			float4 col : COLOR;
 		};
 
 		float4 _MainTex_ST;
@@ -56,47 +53,40 @@ SubShader {
 
 			float4 worldSpace = mul (unity_ObjectToWorld, v.vertex);
 			o.uv = float2 (worldSpace.x*_Scale,worldSpace.z*_Scale);
-			o.col = v.color*_FadeColor;
+			o.col = v.color * _Color * _FadeColor;
+			if (!IsGammaSpaceCompatibility()) {
+				o.col.rgb = GammaToLinearSpace(o.col.rgb);
+			}
 			return o;
 		}
 
-		half4 frag (v2f i) : COLOR {
-			half4 texcol = tex2D (_MainTex, i.uv) * i.col;
-			//texcol.a = 0.1;
-			return texcol;
+		float4 frag (v2f i) : COLOR {
+			return tex2D (_MainTex, i.uv) * i.col;
 		}
 		ENDCG
 
 	 }
 
-	 ZWrite Off
 	Pass {
-		ZTest LEqual
-		//Blend One One Fog { Color (0,0,0,0) }
-
-		Blend SrcAlpha OneMinusSrcAlpha
-
 		ZWrite Off
+		ZTest LEqual
+		Blend SrcAlpha OneMinusSrcAlpha
 
 		CGPROGRAM
 		#pragma vertex vert
 		#pragma fragment frag
 
 		#include "UnityCG.cginc"
+		#include "Navmesh.cginc"
 
 		float4 _Color;
 		sampler2D _MainTex;
 		float _Scale;
 
-		struct appdata_color {
-			float4 vertex : POSITION;
-			fixed4 color : COLOR;
-		};
-
 		struct v2f {
 			float4  pos : SV_POSITION;
 			float2  uv : TEXCOORD0;
-			half4 col : COLOR;
+			float4 col : COLOR;
 		};
 
 		v2f vert (appdata_color v)
@@ -106,16 +96,16 @@ SubShader {
 
 			float4 worldSpace = mul (unity_ObjectToWorld, v.vertex);
 			o.uv = float2 (worldSpace.x*_Scale,worldSpace.z*_Scale);
-			o.col = v.color;
+			o.col = v.color * _Color;
+			if (!IsGammaSpaceCompatibility()) {
+				o.col.rgb = GammaToLinearSpace(o.col.rgb);
+			}
 			return o;
 		}
 
-		half4 frag (v2f i) : COLOR
+		float4 frag (v2f i) : COLOR
 		{
-			//glBlendFunc = GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA;
-			half4 texcol = tex2D (_MainTex, i.uv) * i.col;
-			//texcol.a = 0.1;
-			return texcol * _Color;
+			return tex2D (_MainTex, i.uv) * i.col;
 		}
 		ENDCG
 
@@ -123,5 +113,5 @@ SubShader {
 
 
 	}
-Fallback "VertexLit"
+Fallback Off
 }

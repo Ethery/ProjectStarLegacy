@@ -150,7 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nom: Heal
   stackValue: 64
-  owned: 20
+  owned: 0
+  description: Potion de heal (rends 5 hp)
   tags:
   - Lootable
   - Health

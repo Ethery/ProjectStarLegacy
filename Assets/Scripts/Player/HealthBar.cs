@@ -23,8 +23,6 @@ public class HealthBar : MonoBehaviour{
 	public static Color damagesColor = Color.red;
     
 	public Health health;
-
-	public float damage;
 	
     void Start () {
 		if (healthBar != null)
@@ -126,7 +124,7 @@ public class HealthBar : MonoBehaviour{
 
             // Création d'un objet copie du prefab
             FluctuationLife dialoguef = Instantiate(dialogue,parent,false);
-            Debug.Log("fluct");
+            dialoguef.transform.localPosition = new Vector3(0, 0, 0);
 
             if (isHeal)
             {

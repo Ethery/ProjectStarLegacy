@@ -22,7 +22,7 @@ namespace Pathfinding {
 	 *
 	 * For larger graphs, it can take quite some time to scan the graph with the default settings.
 	 * If you have the pro version you can enable 'optimizeForSparseGraph' which will in most cases reduce the calculation times
-	 * drastically. If your graph is essentially only in the XZ plane (note, not XY), you can enable #optimizeFor2D (called 'Optimize For XZ Plane' in the inspector).
+	 * drastically.
 	 *
 	 * \note Does not support linecast because of obvious reasons.
 	 *
@@ -90,30 +90,29 @@ namespace Pathfinding {
 		/** Number of nodes in this graph */
 		public int nodeCount { get; private set; }
 
-
 		public override int CountNodes () {
 			return nodeCount;
 		}
 
-		public override void GetNodes (GraphNodeDelegateCancelable del) {
+		public override void GetNodes (System.Action<GraphNode> action) {
 			if (nodes == null) return;
-			for (int i = 0; i < nodeCount && del(nodes[i]); i++) {}
+			var count = nodeCount;
+			for (int i = 0; i < count; i++) action(nodes[i]);
 		}
 
-		public override NNInfo GetNearest (Vector3 position, NNConstraint constraint, GraphNode hint) {
-			return GetNearestForce(position, constraint);
+		public override NNInfoInternal GetNearest (Vector3 position, NNConstraint constraint, GraphNode hint) {
+			return GetNearestForce(position, null);
 		}
 
-		public override NNInfo GetNearestForce (Vector3 position, NNConstraint constraint) {
-			if (nodes == null) return new NNInfo();
+		public override NNInfoInternal GetNearestForce (Vector3 position, NNConstraint constraint) {
+			if (nodes == null) return new NNInfoInternal();
 
-			float maxDistSqr = constraint.constrainDistance ? AstarPath.active.maxNearestNodeDistanceSqr : float.PositiveInfinity;
 
+			float maxDistSqr = constraint == null || constraint.constrainDistance ? AstarPath.active.maxNearestNodeDistanceSqr : float.PositiveInfinity;
+
+			var nnInfo = new NNInfoInternal(null);
 			float minDist = float.PositiveInfinity;
-			GraphNode minNode = null;
-
 			float minConstDist = float.PositiveInfinity;
-			GraphNode minConstNode = null;
 
 			for (int i = 0; i < nodeCount; i++) {
 				PointNode node = nodes[i];
@@ -121,59 +120,17 @@ namespace Pathfinding {
 
 				if (dist < minDist) {
 					minDist = dist;
-					minNode = node;
+					nnInfo.node = node;
 				}
 
-				if (constraint == null || (dist < minConstDist && dist < maxDistSqr && constraint.Suitable(node))) {
+				if (dist < minConstDist && dist < maxDistSqr && (constraint == null || constraint.Suitable(node))) {
 					minConstDist = dist;
-					minConstNode = node;
+					nnInfo.constrainedNode = node;
 				}
 			}
 
-			var nnInfo = new NNInfo(minNode);
-
-			nnInfo.constrainedNode = minConstNode;
-
-			if (minConstNode != null) {
-				nnInfo.constClampedPosition = (Vector3)minConstNode.position;
-			} else if (minNode != null) {
-				nnInfo.constrainedNode = minNode;
-				nnInfo.constClampedPosition = (Vector3)minNode.position;
-			}
-
+			nnInfo.UpdateInfo();
 			return nnInfo;
-		}
-
-		struct GetNearestHelper {
-			public Vector3 position;
-			public float minDist, minConstDist, maxDistSqr;
-			public PointNode minNode, minConstNode;
-			NNConstraint constraint;
-			Dictionary<Int3, PointNode> nodeLookup;
-
-			public GetNearestHelper(Vector3 position, float maxDistSqr, NNConstraint constraint, Dictionary<Int3, PointNode> nodeLookup) {
-				this.position = position;
-				this.maxDistSqr = maxDistSqr;
-				this.constraint = constraint;
-				this.nodeLookup = nodeLookup;
-				minDist = float.PositiveInfinity;
-				minConstDist = float.PositiveInfinity;
-				minNode = minConstNode = null;
-			}
-
-			public void Search (Int3 p) {
-				PointNode node;
-
-				if (nodeLookup.TryGetValue(p, out node)) {
-					while (node != null) {
-						float dist = (position-(Vector3)node.position).sqrMagnitude;
-						if (dist < minDist) { minDist = dist; minNode = node; }
-						if (constraint == null || (dist < minConstDist && dist < maxDistSqr && constraint.Suitable(node))) { minConstDist = dist; minConstNode = node; }
-
-						node = node.next;
-					}
-				}
-			}
 		}
 
 		/** Add a node to the graph at the specified position.
@@ -205,9 +162,9 @@ namespace Pathfinding {
 		 */
 		public T AddNode<T>(T node, Int3 position) where T : PointNode {
 			if (nodes == null || nodeCount == nodes.Length) {
-				var nds = new PointNode[nodes != null ? System.Math.Max(nodes.Length+4, nodes.Length*2) : 4];
-				for (int i = 0; i < nodeCount; i++) nds[i] = nodes[i];
-				nodes = nds;
+				var newNodes = new PointNode[nodes != null ? System.Math.Max(nodes.Length+4, nodes.Length*2) : 4];
+				for (int i = 0; i < nodeCount; i++) newNodes[i] = nodes[i];
+				nodes = newNodes;
 			}
 
 			node.SetPosition(position);
@@ -262,7 +219,9 @@ namespace Pathfinding {
 			// A* Pathfinding Project Pro Only
 		}
 
-		public override void ScanInternal (OnScanStatus statusCallback) {
+		public override IEnumerable<Progress> ScanInternal () {
+			yield return new Progress(0, "Searching for GameObjects");
+
 			if (root == null) {
 				//If there is no root object, try to find nodes with the specified tag instead
 				GameObject[] gos = searchTag != null ? GameObject.FindGameObjectsWithTag(searchTag) : null;
@@ -270,8 +229,10 @@ namespace Pathfinding {
 				if (gos == null) {
 					nodes = new PointNode[0];
 					nodeCount = 0;
-					return;
+					yield break;
 				}
+
+				yield return new Progress(0.1f, "Creating nodes");
 
 				//Create and set up the found nodes
 				nodes = new PointNode[gos.Length];
@@ -305,7 +266,6 @@ namespace Pathfinding {
 					nodeCount = nodes.Length;
 
 					for (int i = 0; i < nodes.Length; i++) nodes[i] = new PointNode(active);
-					//CreateNodes (CountChildren (root));
 
 					int startID = 0;
 					AddChildren(ref startID, root);
@@ -314,39 +274,56 @@ namespace Pathfinding {
 
 
 			if (maxDistance >= 0) {
-				//To avoid too many allocations, these lists are reused for each node
-				var connections = new List<PointNode>(3);
-				var costs = new List<uint>(3);
+				// To avoid too many allocations, these lists are reused for each node
+				var connections = new List<Connection>();
 
-				//Loop through all nodes and add connections to other nodes
+				// Max possible squared length of a connection between two nodes
+				// This is used to speed up the calculations by skipping a lot of nodes that do not need to be checked
+				long maxPossibleSqrRange;
+				if (maxDistance == 0 && (limits.x == 0 || limits.y == 0 || limits.z == 0)) {
+					maxPossibleSqrRange = long.MaxValue;
+				} else {
+					maxPossibleSqrRange = (long)(Mathf.Max(limits.x, Mathf.Max(limits.y, Mathf.Max(limits.z, maxDistance))) * Int3.Precision) + 1;
+					maxPossibleSqrRange *= maxPossibleSqrRange;
+				}
+
+				// Report progress every N nodes
+				const int YieldEveryNNodes = 512;
+
+				// Loop through all nodes and add connections to other nodes
 				for (int i = 0; i < nodes.Length; i++) {
+					if (i % YieldEveryNNodes == 0) {
+						yield return new Progress(Mathf.Lerp(0.15f, 1, i/(float) nodes.Length), "Connecting nodes");
+					}
+
 					connections.Clear();
-					costs.Clear();
 
 					PointNode node = nodes[i];
-
 					// Only brute force is available in the free version
 					for (int j = 0; j < nodes.Length; j++) {
 						if (i == j) continue;
 
 						PointNode other = nodes[j];
-
 						float dist;
 						if (IsValidConnection(node, other, out dist)) {
-							connections.Add(other);
-							/** \todo Is this equal to .costMagnitude */
-							costs.Add((uint)Mathf.RoundToInt(dist*Int3.FloatPrecision));
+							connections.Add(new Connection {
+								node = other,
+								/** \todo Is this equal to .costMagnitude */
+								cost = (uint)Mathf.RoundToInt(dist*Int3.FloatPrecision)
+							});
 						}
 					}
 					node.connections = connections.ToArray();
-					node.connectionCosts = costs.ToArray();
 				}
 			}
 		}
 
 		/** Returns if the connection between \a a and \a b is valid.
 		 * Checks for obstructions using raycasts (if enabled) and checks for height differences.\n
-		 * As a bonus, it outputs the distance between the nodes too if the connection is valid
+		 * As a bonus, it outputs the distance between the nodes too if the connection is valid.
+		 *
+		 * \note This is not the same as checking if node a is connected to node b.
+		 * That should be done using a.ContainsConnection(b)
 		 */
 		public virtual bool IsValidConnection (GraphNode a, GraphNode b, out float dist) {
 			dist = 0;
@@ -389,12 +366,38 @@ namespace Pathfinding {
 		}
 
 
+#if UNITY_EDITOR
+		public override void OnDrawGizmos (Pathfinding.Util.RetainedGizmos gizmos, bool drawNodes) {
+			base.OnDrawGizmos(gizmos, drawNodes);
+
+			if (!drawNodes) return;
+
+			Gizmos.color = new Color(0.161f, 0.341f, 1f, 0.5f);
+
+			if (root != null) {
+				DrawChildren(this, root);
+			} else if (!string.IsNullOrEmpty(searchTag)) {
+				GameObject[] gos = GameObject.FindGameObjectsWithTag(searchTag);
+				for (int i = 0; i < gos.Length; i++) {
+					Gizmos.DrawCube(gos[i].transform.position, Vector3.one*UnityEditor.HandleUtility.GetHandleSize(gos[i].transform.position)*0.1F);
+				}
+			}
+		}
+
+		static void DrawChildren (PointGraph graph, Transform tr) {
+			foreach (Transform child in tr) {
+				Gizmos.DrawCube(child.position, Vector3.one*UnityEditor.HandleUtility.GetHandleSize(child.position)*0.1F);
+				if (graph.recursive) DrawChildren(graph, child);
+			}
+		}
+#endif
+
 		public override void PostDeserialization () {
 			RebuildNodeLookup();
 		}
 
-		public override void RelocateNodes (Matrix4x4 oldMatrix, Matrix4x4 newMatrix) {
-			base.RelocateNodes(oldMatrix, newMatrix);
+		public override void RelocateNodes (Matrix4x4 deltaMatrix) {
+			base.RelocateNodes(deltaMatrix);
 			RebuildNodeLookup();
 		}
 

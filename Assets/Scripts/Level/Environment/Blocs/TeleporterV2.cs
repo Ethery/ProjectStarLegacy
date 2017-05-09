@@ -3,21 +3,20 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Collider2D))]
-public class TeleporterV2 : MonoBehaviour {
+public class TeleporterV2 : Interactable {
 
 	public Button prefabDestinationButton;
 	public GameObject mainDisplay;
 	public Transform contentList;
 	public Animator fonduAnime;
 	private List<TeleporterV2> listTps = new List<TeleporterV2>();
-	private bool opened,ranged,filled,pressed;
-	private string to;
+	private bool filled,tp;
 
 	// Use this for initialization
 	void Start () {
-		to = "";
 		TeleporterV2[] tmp = FindObjectsOfType<TeleporterV2>();
 		foreach (TeleporterV2 item in tmp)
 		{
@@ -27,10 +26,7 @@ public class TeleporterV2 : MonoBehaviour {
 			}
 		}
 		filled = false;
-		opened = false;
-		ranged = false;
-		pressed = false;
-		mainDisplay.SetActive(opened);
+		mainDisplay.SetActive(active);
 	}
 
 	private void Update()
@@ -51,39 +47,7 @@ public class TeleporterV2 : MonoBehaviour {
 			}
 			filled = true;
 		}
-		if (ranged && filled)
-		{
-			if (!opened && Input.GetButtonDown("Submit"))
-			{
-				opened = true;
-				mainDisplay.SetActive(opened);
-				pressed = true;
-				Time.timeScale = 0f;
-			}
-			if (Input.GetButtonUp("Submit"))
-				pressed = false;
-			if (!pressed && opened && Input.GetButtonDown("Submit"))
-			{
-				FindObjectOfType<PlayerInputManager>().canMove = false;
-				fonduAnime.SetTrigger("start");
-				GetComponent<Animator>().SetTrigger("Started");
-				FindObjectOfType<PlayerInputManager>().canUse = false;
-				opened = false;
-				mainDisplay.SetActive(opened);
-				Time.timeScale = 1f;
-			}
-			if (opened && Input.GetButtonDown("Cancel"))
-			{
-				opened = false;
-				mainDisplay.SetActive(opened);
-				Time.timeScale = 1f;
-			}
-		}
-		if (opened && EventSystem.current.currentSelectedGameObject != null)
-		{
-			to = EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>(true).text;
-		}
-		else if (opened && EventSystem.current.currentSelectedGameObject == null)
+		if (active && EventSystem.current.currentSelectedGameObject == null)
 		{
 			if (contentList.childCount > 0)
 			{
@@ -97,7 +61,6 @@ public class TeleporterV2 : MonoBehaviour {
 		if (collision.GetComponent<CharacterManager>() != null)
 		{
 			ranged = true;
-			collision.GetComponent<PlayerInputManager>().canUse = true;
 		}
 	}
 
@@ -111,24 +74,93 @@ public class TeleporterV2 : MonoBehaviour {
 				Destroy(contentList.GetChild(i).gameObject);
 			}
 			filled = false;
-			collision.GetComponent<PlayerInputManager>().canUse = false;
 		}
 
 	}
 
 	public void Teleport()
 	{
-		foreach (TeleporterV2 item in listTps)
+        if (!tp)
+        {
+            foreach (TeleporterV2 item in listTps)
+            {
+                if (item.name == EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>(true).text)
+                {
+                    FindObjectOfType<CharacterManager>().transform.position = item.transform.position;
+                    FindObjectOfType<PlayerInputManager>().canMove = true;
+                    FindObjectOfType<PlayerInputManager>().canUse = true;
+                    fonduAnime.SetTrigger("start");
+                    filled = false;
+                    tp = true;
+                    Activate(false);
+                    break;
+                }
+            }
+        }
+	}
+
+	public override bool Activate(bool a, string key)
+	{
+		if (ranged && a && key == "Submit")
 		{
-			if (item.name == to)
+			active = a;
+			if (a)
 			{
-				FindObjectOfType<CharacterManager>().transform.position = item.transform.position;
-				FindObjectOfType<PlayerInputManager>().canMove = true;
-				fonduAnime.SetTrigger("start");
-				filled = false;
-				break;
+				init();
 			}
+			mainDisplay.SetActive(active);
+			FindObjectOfType<PlayerInputManager>().canMove = false;
+			Time.timeScale = 0f;
+            tp = false;
+			return true;
+		}
+		if (!a && key == "Cancel")
+		{
+			active = a;
+			mainDisplay.SetActive(active);
+			FindObjectOfType<PlayerInputManager>().canMove = true;
+			Time.timeScale = 1f;
+            return true;
+		}
+		return false;
+	}
+
+	public override void Activate(bool a)
+	{
+		active = a;
+		mainDisplay.SetActive(a);
+		FindObjectOfType<PlayerInputManager>().canMove = !a;
+		if (a)
+		{
+			Time.timeScale = 0f;
+            tp = false;
+		}
+		else
+		{
+			Time.timeScale = 1f;
 		}
 	}
-	
+
+	public override bool nextStep(string key)
+	{
+		if (key == "Submit")
+		{
+			FindObjectOfType<PlayerInputManager>().canMove = false;
+			FindObjectOfType<PlayerInputManager>().canUse = false;
+			fonduAnime.SetTrigger("start");
+			GetComponent<Animator>().SetTrigger("Started");
+			return true;
+		}
+		return true;
+	}
+
+	public override bool previousStep(string key)
+	{
+		if (key == "Cancel")
+		{
+			Activate(false, key);
+		}
+		return true;
+
+	}
 }

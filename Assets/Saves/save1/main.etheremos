@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MainStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <lastVisitedLevel>Navette</lastVisitedLevel>
+  <levels>
+    <LevelStats>
+      <id>0</id>
+      <nom />
+      <finished>false</finished>
+    </LevelStats>
+    <LevelStats>
+      <id>1</id>
+      <nom />
+      <finished>false</finished>
+    </LevelStats>
+    <LevelStats>
+      <id>2</id>
+      <nom>Navette</nom>
+      <finished>false</finished>
+    </LevelStats>
+    <LevelStats>
+      <id>3</id>
+      <nom />
+      <finished>false</finished>
+    </LevelStats>
+  </levels>
+  <avis />
+  <Stock />
+  <Inventory>
+    <Item>
+      <name>Heal</name>
+      <owned>5</owned>
+      <description>Potion de heal (rends 5 hp)</description>
+      <tags>
+        <string>Lootable</string>
+        <string>Health</string>
+      </tags>
+      <stats>
+        <Stat>
+          <name>Heal Amount</name>
+          <value>5</value>
+        </Stat>
+      </stats>
+    </Item>
+  </Inventory>
+</MainStatus>

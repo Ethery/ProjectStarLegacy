@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,21 +6,19 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class WorldMapManager : MonoBehaviour {
+public class WorldMapManager : Interactable {
 
 	public Transform buttonPrefab;
 	public GameObject mainDisplay;
 	public Transform contentList;
 
 	public List<LevelStats> levels;
-	private bool opened, ranged, pressed;
+	private bool pressed;
 
 
 	// Use this for initialization
 	void Start () {
 		levels = FindObjectOfType<SavesManager>().main.levels;
-		opened = false;
-		ranged = false;
 		pressed = false;
 		foreach (LevelStats lv in levels)
 		{
@@ -45,38 +44,12 @@ public class WorldMapManager : MonoBehaviour {
 				}
 			}
 		}
-		mainDisplay.SetActive(opened);
+		mainDisplay.SetActive(active);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (ranged)
-		{
-			if (!opened && Input.GetButtonDown("Submit"))
-			{
-				opened = true;
-				mainDisplay.SetActive(opened);
-				pressed = true;
-				Time.timeScale = 0f;
-			}
-			if (Input.GetButtonUp("Submit"))
-				pressed = false;
-			if (!pressed && opened && Input.GetButtonDown("Submit"))
-			{
-				FindObjectOfType<PlayerInputManager>().canMove = false;
-				FindObjectOfType<Fading>().FadeTo(int.Parse(EventSystem.current.currentSelectedGameObject.name));
-				opened = false;
-				mainDisplay.SetActive(opened);
-				Time.timeScale = 1f;
-			}
-			if (opened && Input.GetButtonDown("Cancel"))
-			{
-				opened = false;
-				mainDisplay.SetActive(opened);
-				Time.timeScale = 1f;
-			}
-        }
-        if (opened && EventSystem.current.currentSelectedGameObject == null)
+        if (active && EventSystem.current.currentSelectedGameObject == null)
 		{
 			if (contentList.childCount > 0)
 			{
@@ -90,7 +63,6 @@ public class WorldMapManager : MonoBehaviour {
 		if (collision.GetComponent<CharacterManager>() != null)
 		{
 			ranged = true;
-			collision.GetComponent<PlayerInputManager>().canUse = true;
 		}
 	}
 
@@ -99,8 +71,66 @@ public class WorldMapManager : MonoBehaviour {
 		if (collision.GetComponent<CharacterManager>() != null)
 		{
 			ranged = false;
-			collision.GetComponent<PlayerInputManager>().canUse = false;
 		}
+
+	}
+
+	public override bool Activate(bool a, string key)
+	{
+		if (a && key == "Submit")
+		{
+			active = a;
+			mainDisplay.SetActive(a);
+			FindObjectOfType<PlayerInputManager>().canMove = false;
+			Time.timeScale = 0f;
+			return true;
+		}
+		if (!a && key == "Cancel")
+		{
+			active = a;
+			mainDisplay.SetActive(a);
+			FindObjectOfType<PlayerInputManager>().canMove = true;
+			Time.timeScale = 1f;
+			return true;
+		}
+		return false;
+	}
+
+	public override void Activate(bool a)
+	{
+		active = a;
+		mainDisplay.SetActive(a);
+		FindObjectOfType<PlayerInputManager>().canMove = !a;
+		if (a)
+		{
+			Time.timeScale = 0f;
+		}
+		else
+		{
+			Time.timeScale = 1f;
+		}
+	}
+
+	public override bool nextStep(string key)
+	{
+		if (key == "Submit")
+		{
+			FindObjectOfType<PlayerInputManager>().canMove = false;
+			FindObjectOfType<PlayerInputManager>().canUse = false;
+			FindObjectOfType<Fading>().FadeTo(int.Parse(EventSystem.current.currentSelectedGameObject.name));
+			Activate(false);
+			return false;
+		}
+		return true;
+	}
+
+	public override bool previousStep(string key)
+	{
+		if (key == "Cancel")
+		{
+			Activate(false, key);
+		}
+		return true;
 
 	}
 }

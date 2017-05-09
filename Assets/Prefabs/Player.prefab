@@ -129,10 +129,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 65
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0.5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 0
@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 1
+  canUse: 0
 --- !u!114 &11481208
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -215,9 +216,7 @@ MonoBehaviour:
   colorHightHpLevel: {r: 0.21457607, g: 0.8897059, b: 0.045793675, a: 1}
   colorMidHpLevel: {r: 1, g: 0.49803925, b: 0, a: 1}
   colorLowHpLevel: {r: 1, g: 0, b: 0, a: 1}
-  dialogue: {fileID: 0}
-  healColor: {r: 0, g: 1, b: 0.006896496, a: 1}
-  damagesColor: {r: 1, g: 0, b: 0, a: 1}
+  dialogue: {fileID: 114658961498956416, guid: 59c8ba653b8506d43a2aaef4de46e8b2, type: 2}
   health:
     totalPv: 30
     actualPv: 0
@@ -234,13 +233,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MaxSpeed: 10
-  m_JumpForce: 640
+  m_JumpForce: 320
   m_CrouchSpeed: 0.25
   m_AirSpeed: 0.6
   m_AirControl: 1
   m_WhatIsGround:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 524289
   m_Grounded: 0
   glissant: {fileID: 6200000, guid: 3626fe8e008014f6bbd19bb72937b311, type: 2}
   accrochant: {fileID: 6200000, guid: 0cb77231a430b454fb792ff7ffcc3943, type: 2}
@@ -639,7 +638,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 165176}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 3626fe8e008014f6bbd19bb72937b311, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: -0.05}
@@ -804,7 +803,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f16d3b3a2007ac34294c74d677780b14, type: 3}
+    m_Font: {fileID: 12800000, guid: 105c8541c2ee75e4db679d4d7cfa4145, type: 3}
     m_FontSize: 150
     m_FontStyle: 0
     m_BestFit: 0

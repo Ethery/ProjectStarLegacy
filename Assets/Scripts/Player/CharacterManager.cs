@@ -4,21 +4,19 @@ using UnityEngine;
 public class CharacterManager : MonoBehaviour
 {
     [SerializeField] private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis.
-    [SerializeField] private float m_JumpForce = 200f;                  // Amount of force added when the player jumps.
+    [SerializeField] private float m_JumpForce = 320f;                  // Amount of force added when the player jumps.
 	[Range(0, 1)]
 	[SerializeField]
-	private float m_CrouchSpeed = .36f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
+	private float m_CrouchSpeed = .25f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
 	[Range(0, 1)]
 	[SerializeField]
-	private float m_AirSpeed = .36f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
-	[SerializeField] private bool m_AirControl = false;                 // Whether or not a player can steer while jumping;
+	private float m_AirSpeed = .6f;  // Amount of maxSpeed applied to crouching movement. 1 = 100%
+	[SerializeField] private bool m_AirControl = true;                 // Whether or not a player can steer while jumping;
     [SerializeField] private LayerMask m_WhatIsGround;                  // A mask determining what is ground to the character
         
-    const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
     [SerializeField] private bool m_Grounded;            // Whether or not the player is grounded.
     private EdgeCollider2D m_GroundCheck;   // A position marking where to check for ceilings
     private Collider2D m_CeilingCheck;   // A position marking where to check for ceilings
-    const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the player can stand up
     private Animator m_Anim;            // Reference to the player's animator component.
     private Rigidbody2D m_Rigidbody2D;
     private bool m_FacingRight = true;  // For determining which way the player is currently facing.
@@ -104,7 +102,7 @@ public class CharacterManager : MonoBehaviour
         {
             m_Grounded = false;
             m_Anim.SetBool("Ground", false);
-            m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+            m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce*m_Rigidbody2D.mass));
         }
     }
 
@@ -128,7 +126,6 @@ public class CharacterManager : MonoBehaviour
 		if (weaponManager != null)
 		{
 			weaponManager.changeWeapon();
-			weaponManager.flipWeapons(m_FacingRight,true);
 		}
 	}
 
@@ -144,7 +141,6 @@ public class CharacterManager : MonoBehaviour
 	private void Flip()
     {
         m_FacingRight = !m_FacingRight;
-		weaponManager.flipWeapons(m_FacingRight,false);
     }
 
     public bool isFacingRight()
