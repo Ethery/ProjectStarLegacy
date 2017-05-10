@@ -1,9 +1,6 @@
 # ProjectStarLegacy
 
 Pour l'installation du jeu : 
-1:Telechargez la derniere release
-2:dezipez TOUT son contenu a l'endroit voulu
-3:Lancer le .exe.
-4:enjoy.
+-Telechargez la version que vous voulez a partir de https://github.com/Ethery/ProjectStarLegacy/releases
+-Une fois le jeu installé sur votre machine vous pouvez y jouer :)
 
-Ou sinon Le tout se trouve deja dans le dossier 'Builded' du depot.
